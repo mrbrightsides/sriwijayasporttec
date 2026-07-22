@@ -24,9 +24,9 @@ export const AddPesertaModal: React.FC<AddPesertaModalProps> = ({
     id: defaultId,
     nama: '',
     jenisKelamin: 'Laki-laki',
-    tanggalLahir: '1998-05-10',
-    umur: 28,
-    komunitas: KOMUNITAS_LIST[0] || 'Gowes Palembang',
+    tanggalLahir: '2000-01-15',
+    umur: 26,
+    komunitas: KOMUNITAS_LIST[0] || 'Bersepeda',
     noHp: '',
     alamat: 'Palembang, Sumatera Selatan',
     fotoUrl: '',
@@ -36,15 +36,16 @@ export const AddPesertaModal: React.FC<AddPesertaModalProps> = ({
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   const calculateAgeFromDob = (dobString: string) => {
-    if (!dobString) return 28;
+    if (!dobString) return 25;
     const birthDate = new Date(dobString);
+    if (isNaN(birthDate.getTime())) return 25;
     const today = new Date();
     let age = today.getFullYear() - birthDate.getFullYear();
     const monthDiff = today.getMonth() - birthDate.getMonth();
     if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
       age--;
     }
-    return age > 0 ? age : 28;
+    return age > 0 ? age : 25;
   };
 
   const handleDobChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -185,13 +186,15 @@ export const AddPesertaModal: React.FC<AddPesertaModalProps> = ({
             {/* Umur */}
             <div>
               <label className="block text-slate-700 font-bold mb-1">
-                Umur (Tahun Auto)
+                Umur (Tahun)
               </label>
               <input
                 type="number"
-                readOnly
+                min="5"
+                max="100"
                 value={formData.umur}
-                className="w-full px-3 py-2 bg-slate-100 border border-slate-200 rounded-xl font-bold text-slate-700"
+                onChange={(e) => setFormData({ ...formData, umur: parseInt(e.target.value) || 0 })}
+                className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-yellow-500 font-bold text-slate-900"
               />
             </div>
 
