@@ -14,7 +14,10 @@ export const Screen2DataPeserta: React.FC<Screen2DataPesertaProps> = ({
   onSavePeserta,
   onNext,
 }) => {
-  const [formData, setFormData] = useState<Peserta>(currentPeserta);
+  const [formData, setFormData] = useState<Peserta>(() => ({
+    ...currentPeserta,
+    bulanTes: currentPeserta.bulanTes || 'Juli',
+  }));
 
   const calculateAgeFromDob = (dobString: string) => {
     if (!dobString) return 25;
@@ -228,6 +231,30 @@ export const Screen2DataPeserta: React.FC<Screen2DataPesertaProps> = ({
                   <option key={k} value={k}>{k}</option>
                 ))}
               </select>
+            </div>
+
+            {/* Bulan Pelaksanaan Tes */}
+            <div className="p-3 bg-blue-50/70 border border-blue-200 rounded-xl">
+              <label className="block text-xs font-bold text-blue-900 mb-1 flex items-center justify-between">
+                <span>Bulan Pelaksanaan Tes Kebugaran <span className="text-red-500">*</span></span>
+                <span className="text-[10px] font-bold text-blue-700 bg-blue-100 px-2 py-0.5 rounded-full">
+                  Periode Evaluasi
+                </span>
+              </label>
+              <select
+                value={formData.bulanTes || 'Juli'}
+                onChange={(e) => setFormData({ ...formData, bulanTes: e.target.value })}
+                className="w-full px-3 py-2 text-xs bg-white border border-blue-300 rounded-xl focus:ring-2 focus:ring-yellow-500 font-bold text-slate-900"
+              >
+                {MONTHS_INDONESIA.map((m) => (
+                  <option key={m.value} value={m.label}>
+                    Bulan {m.label} (Tes Evaluasi)
+                  </option>
+                ))}
+              </select>
+              <p className="text-[10px] text-blue-800 mt-1">
+                Pilih bulan pelaksanaan agar skor tes peserta tersimpan secara tepat pada grafik evaluasi bulanan.
+              </p>
             </div>
 
             {/* No. HP */}

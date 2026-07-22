@@ -77,7 +77,7 @@ export default function App() {
 
   // Form States for current active measurement
   const [currentAktivitas, setCurrentAktivitas] = useState<AktivitasFisik>(() =>
-    calculateAktivitasFisik('Sangat Jarang (<1x/mg)', '<1 kali/minggu', '<30 menit', 'Sangat Ringan', [])
+    calculateAktivitasFisik('Tidak berolahraga', '<1 kali/minggu', '<20 menit', 'Ringan', [])
   );
 
   const [currentIMT, setCurrentIMT] = useState<DataIMT>(() =>
@@ -130,31 +130,31 @@ export default function App() {
     setCurrentPeserta(peserta);
   };
 
-  // Current Date string
-  const currentDateFormatted = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
-
   // Build current assessment record from form state
+  const selectedMonthName = currentPeserta.bulanTes || 'Juli';
+  const testDateFormatted = `15 ${selectedMonthName} 2026`;
+
   const currentRecord: AssessmentRecord = {
-    id: `REC-${currentPeserta.id}-${Date.now()}`,
+    id: `REC-${currentPeserta.id}-${selectedMonthName}`,
     peserta: currentPeserta,
     aktivitas: currentAktivitas,
     imt: currentIMT,
     tkji: currentTKJI,
     functional: currentFunctional,
     evaluation: evaluateSriwijayaSportTec(currentAktivitas, currentIMT, currentTKJI, currentFunctional),
-    tanggal: currentDateFormatted,
+    tanggal: testDateFormatted,
   };
 
   // Save record when completing steps
   const saveCurrentRecord = () => {
-    // Check if a record exists for this participant on today's date
+    // Check if a record exists for this participant in the selected month
     const existingIndex = records.findIndex(
-      (r) => r.peserta.id === currentPeserta.id && r.tanggal === currentDateFormatted
+      (r) => r.peserta.id === currentPeserta.id && r.tanggal.toLowerCase().includes(selectedMonthName.toLowerCase())
     );
     let updatedRecords: AssessmentRecord[];
     if (existingIndex >= 0) {
       updatedRecords = [...records];
-      updatedRecords[existingIndex] = { ...currentRecord, tanggal: currentDateFormatted };
+      updatedRecords[existingIndex] = { ...currentRecord, tanggal: testDateFormatted };
     } else {
       updatedRecords = [currentRecord, ...records];
     }
@@ -186,7 +186,7 @@ export default function App() {
       setCurrentFunctional(existing.functional);
     } else {
       // Clean zero default for new test
-      setCurrentAktivitas(calculateAktivitasFisik('Sangat Jarang (<1x/mg)', '<1 kali/minggu', '<30 menit', 'Sangat Ringan', []));
+      setCurrentAktivitas(calculateAktivitasFisik('Tidak berolahraga', '<1 kali/minggu', '<20 menit', 'Ringan', []));
       setCurrentIMT(calculateIMT(0, 0));
       setCurrentTKJI(calculateTKJI(peserta.jenisKelamin, 0, 0, 0));
       setCurrentFunctional(calculateFunctionalFitness(peserta.umur, 0, 0, 0, 0, 0, 0, 0));

@@ -20,6 +20,7 @@ export interface Peserta {
   noHp: string;
   alamat: string;
   fotoUrl?: string;
+  bulanTes?: string;
   createdAt: string;
 }
 

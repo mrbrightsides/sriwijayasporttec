@@ -82,12 +82,12 @@ export function calculateAktivitasFisik(
 export function calculateIMT(tinggiBadanCm: number, beratBadanKg: number): DataIMT {
   if (!tinggiBadanCm || tinggiBadanCm <= 0 || !beratBadanKg || beratBadanKg <= 0) {
     return {
-      tinggiBadan: tinggiBadanCm || 170,
-      beratBadan: beratBadanKg || 68,
-      nilaiIMT: 23.5,
+      tinggiBadan: tinggiBadanCm || 0,
+      beratBadan: beratBadanKg || 0,
+      nilaiIMT: 0,
       kategoriIMT: 'Normal',
-      skorIMT: 100,
-      statusGizi: 'Status gizi normal, risiko penyakit metabolik relatif rendah.',
+      skorIMT: 0,
+      statusGizi: 'Silakan isi tinggi dan berat badan untuk menghitung IMT.',
     };
   }
 
