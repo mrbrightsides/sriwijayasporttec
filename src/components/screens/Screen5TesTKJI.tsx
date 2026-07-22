@@ -21,10 +21,8 @@ export const Screen5TesTKJI: React.FC<Screen5TesTKJIProps> = ({
   const [cooper, setCooper] = useState<number>(currentTKJI.cooperDistanceMeter || 2500);
   const [pushUp, setPushUp] = useState<number>(currentTKJI.pushUpRepetisi || 48);
   const [verticalJump, setVerticalJump] = useState<number>(currentTKJI.verticalJumpCm || 58);
-  const [lari60m, setLari60m] = useState<number>(currentTKJI.lari60m || 8.2);
-  const [sitUp, setSitUp] = useState<number>(currentTKJI.sitUpRepetisi || 32);
 
-  const calculated = calculateTKJI(peserta.jenisKelamin, cooper, pushUp, verticalJump, lari60m, sitUp);
+  const calculated = calculateTKJI(peserta.jenisKelamin, cooper, pushUp, verticalJump);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -79,35 +77,11 @@ export const Screen5TesTKJI: React.FC<Screen5TesTKJIProps> = ({
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             
-            {/* 1. Lari 60 Meter */}
+            {/* 1. Push-Up 60 Detik */}
             <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200">
               <div className="flex items-center justify-between mb-1.5">
                 <label className="text-xs font-bold text-slate-800 flex items-center space-x-1.5">
                   <span className="w-5 h-5 rounded-full bg-blue-100 text-blue-800 text-[10px] font-bold flex items-center justify-center">1</span>
-                  <span>Lari 60 Meter (Kecepatan)</span>
-                </label>
-                <span className="text-[10px] text-slate-500">detik</span>
-              </div>
-              <input
-                type="number"
-                step="0.1"
-                min="4"
-                max="30"
-                value={lari60m}
-                onChange={(e) => {
-                  const val = e.target.value.replace(/^0+(?=\d)/, '');
-                  e.target.value = val;
-                  setLari60m(val === '' ? 0 : Number(val));
-                }}
-                className="w-full px-3 py-2 text-xs bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-yellow-500 font-bold text-slate-800"
-              />
-            </div>
-
-            {/* 2. Push-Up 60 Detik */}
-            <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200">
-              <div className="flex items-center justify-between mb-1.5">
-                <label className="text-xs font-bold text-slate-800 flex items-center space-x-1.5">
-                  <span className="w-5 h-5 rounded-full bg-blue-100 text-blue-800 text-[10px] font-bold flex items-center justify-center">2</span>
                   <span>Push-Up 60 Detik (Daya Tahan Otot)</span>
                 </label>
                 <span className="text-[10px] font-bold text-emerald-600">Bobot 30%</span>
@@ -130,34 +104,11 @@ export const Screen5TesTKJI: React.FC<Screen5TesTKJIProps> = ({
               <div className="text-[10px] text-slate-500 mt-1">Skor Norma Component: {calculated.skorPushUp}/100</div>
             </div>
 
-            {/* 3. Sit-Up 60 Detik */}
+            {/* 2. Vertical Jump */}
             <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200">
               <div className="flex items-center justify-between mb-1.5">
                 <label className="text-xs font-bold text-slate-800 flex items-center space-x-1.5">
-                  <span className="w-5 h-5 rounded-full bg-blue-100 text-blue-800 text-[10px] font-bold flex items-center justify-center">3</span>
-                  <span>Sit-Up 60 Detik (Kekuatan Perut)</span>
-                </label>
-                <span className="text-[10px] text-slate-500">repetisi</span>
-              </div>
-              <input
-                type="number"
-                min="0"
-                max="100"
-                value={sitUp}
-                onChange={(e) => {
-                  const val = e.target.value.replace(/^0+(?=\d)/, '');
-                  e.target.value = val;
-                  setSitUp(val === '' ? 0 : Number(val));
-                }}
-                className="w-full px-3 py-2 text-xs bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-yellow-500 font-bold text-slate-800"
-              />
-            </div>
-
-            {/* 4. Vertical Jump */}
-            <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200">
-              <div className="flex items-center justify-between mb-1.5">
-                <label className="text-xs font-bold text-slate-800 flex items-center space-x-1.5">
-                  <span className="w-5 h-5 rounded-full bg-blue-100 text-blue-800 text-[10px] font-bold flex items-center justify-center">4</span>
+                  <span className="w-5 h-5 rounded-full bg-blue-100 text-blue-800 text-[10px] font-bold flex items-center justify-center">2</span>
                   <span>Vertical Jump (Power Tungkai)</span>
                 </label>
                 <span className="text-[10px] font-bold text-emerald-600">Bobot 30%</span>
@@ -182,11 +133,11 @@ export const Screen5TesTKJI: React.FC<Screen5TesTKJIProps> = ({
 
           </div>
 
-          {/* 5. Cooper 12-Minute Run Test (40% Weight) */}
+          {/* 3. Cooper 12-Minute Run Test (40% Weight) */}
           <div className="p-4 bg-amber-50/80 border border-amber-200 rounded-2xl">
             <div className="flex items-center justify-between mb-2">
               <label className="text-xs font-bold text-amber-900 flex items-center space-x-2">
-                <span className="w-6 h-6 rounded-full bg-amber-500 text-slate-950 font-black text-xs flex items-center justify-center">5</span>
+                <span className="w-6 h-6 rounded-full bg-amber-500 text-slate-950 font-black text-xs flex items-center justify-center">3</span>
                 <span>Lari 12 Menit (Cooper 12-Minute Run Test)</span>
               </label>
               <span className="text-xs font-black bg-amber-200 text-amber-900 px-2 py-0.5 rounded-full">
