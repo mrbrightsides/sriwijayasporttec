@@ -138,7 +138,7 @@ graph TD
 
 1. **Kloning Repositori**:
    ```bash
-   git clone https://github.com/username/sriwijaya-sport-tec.git
+   git clone https://github.com/mrbrightsides/sriwijaya-sport-tec.git
    cd sriwijaya-sport-tec
    ```
 
