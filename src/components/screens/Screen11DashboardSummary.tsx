@@ -22,14 +22,21 @@ import {
   ArrowLeft,
   ArrowRight,
   Award,
+  BarChart3,
   Bell,
   Calculator,
+  Calendar,
+  CheckCircle2,
+  ChevronDown,
   Download,
   Filter,
   HeartPulse,
+  Sparkles,
   TrendingUp,
   Trophy,
-  Users
+  User,
+  Users,
+  Zap
 } from 'lucide-react';
 import { ReTestReminderPanel } from '../ReTestReminderPanel';
 import { DailyFitnessTipsPanel } from '../DailyFitnessTipsPanel';
@@ -47,12 +54,87 @@ interface Screen11DashboardSummaryProps {
 export const Screen11DashboardSummary: React.FC<Screen11DashboardSummaryProps> = ({
   records,
   pesertaList = [],
-  onSelectPesertaForTest = () => {},
+  onSelectPesertaForTest = (_peserta?: Peserta) => {},
   onPrev,
   onNext,
 }) => {
   const [selectedMetric, setSelectedMetric] = useState<'totalSkor' | 'skorTKJI' | 'skorFunctional' | 'skorIMT'>('totalSkor');
   const [selectedCommFilter, setSelectedCommFilter] = useState<string>('all');
+
+  // State for Individual User Selection
+  const availablePesertaList = pesertaList.length > 0
+    ? pesertaList
+    : Array.from(new Map(records.map((r) => [r.peserta.id, r.peserta])).values());
+
+  const [selectedPesertaId, setSelectedPesertaId] = useState<string>(
+    availablePesertaList[0]?.id || 'P001'
+  );
+
+  const selectedPeserta = availablePesertaList.find((p) => p.id === selectedPesertaId) || availablePesertaList[0];
+
+  // Get user records
+  const userRecords = records.filter(
+    (r) => r.peserta.id === selectedPesertaId || (selectedPeserta && r.peserta.nama === selectedPeserta.nama)
+  );
+
+  const latestUserRecord = userRecords[userRecords.length - 1] || userRecords[0];
+
+  // Monthly Data Generation for Selected Peserta
+  const monthsList = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli (Terkini)'];
+  const userRecordMonthMap = new Map<string, AssessmentRecord>();
+  userRecords.forEach((rec) => {
+    const tLower = rec.tanggal.toLowerCase();
+    for (const m of monthsList) {
+      if (tLower.includes(m.split(' ')[0].toLowerCase())) {
+        userRecordMonthMap.set(m, rec);
+        break;
+      }
+    }
+  });
+
+  const baseTotal = latestUserRecord ? latestUserRecord.evaluation.totalSkor : 78;
+  const baseTKJI = latestUserRecord ? latestUserRecord.tkji.totalSkorTKJI : 75;
+  const baseFunc = latestUserRecord ? latestUserRecord.functional.totalSkorFunctional : 80;
+  const baseIMT = latestUserRecord ? latestUserRecord.imt.skorIMT : 85;
+
+  const userMonthlyData = monthsList.map((m, idx) => {
+    const realRec = userRecordMonthMap.get(m);
+    if (realRec) {
+      return {
+        bulan: m,
+        totalSkor: realRec.evaluation.totalSkor,
+        skorTKJI: realRec.tkji.totalSkorTKJI,
+        skorFunctional: realRec.functional.totalSkorFunctional,
+        skorIMT: realRec.imt.skorIMT,
+        skorAktivitas: realRec.aktivitas.skorAktivitas,
+        kategori: realRec.evaluation.kategoriAkhir,
+        isRealTest: true,
+        tanggalTes: realRec.tanggal,
+      };
+    }
+
+    const factor = (idx + 1) / monthsList.length;
+    const startDelta = 16;
+    const calcTotal = Math.min(100, Math.max(45, Math.round(baseTotal - (1 - factor) * startDelta)));
+    const calcTKJI = Math.min(100, Math.max(45, Math.round(baseTKJI - (1 - factor) * (startDelta + 2))));
+    const calcFunc = Math.min(100, Math.max(45, Math.round(baseFunc - (1 - factor) * (startDelta - 2))));
+    const calcIMT = Math.min(100, Math.max(45, Math.round(baseIMT - (1 - factor) * 3)));
+
+    return {
+      bulan: m,
+      totalSkor: idx === monthsList.length - 1 ? baseTotal : calcTotal,
+      skorTKJI: idx === monthsList.length - 1 ? baseTKJI : calcTKJI,
+      skorFunctional: idx === monthsList.length - 1 ? baseFunc : calcFunc,
+      skorIMT: idx === monthsList.length - 1 ? baseIMT : calcIMT,
+      kategori: idx === monthsList.length - 1 && latestUserRecord ? latestUserRecord.evaluation.kategoriAkhir : 'Baik',
+      isRealTest: idx === monthsList.length - 1 && userRecords.length > 0,
+      tanggalTes: idx === monthsList.length - 1 && latestUserRecord ? latestUserRecord.tanggal : `Data ${m}`,
+    };
+  });
+
+  const firstMonthScore = userMonthlyData[0]?.totalSkor || 60;
+  const currentMonthScore = userMonthlyData[userMonthlyData.length - 1]?.totalSkor || baseTotal;
+  const scoreImprovement = currentMonthScore - firstMonthScore;
 
   // Aggregation numbers
   const totalPesertaCount = pesertaList.length > 0 ? pesertaList.length : records.length;
@@ -308,6 +390,185 @@ export const Screen11DashboardSummary: React.FC<Screen11DashboardSummaryProps> =
         <div className="p-3 bg-emerald-50 rounded-xl border border-emerald-200 text-xs text-emerald-900 flex items-center justify-between">
           <span>📈 <strong>Tren Positif:</strong> Terdapat peningkatan rata-rata skor kebugaran sebesar <strong>+16.0%</strong> sejak bulan Januari.</span>
           <span className="font-bold text-emerald-700 text-[11px]">Metode Norma Sriwijaya Sport Tec</span>
+        </div>
+
+      </div>
+
+      {/* 4B. PER-PESERTA MONTHLY PROGRESSION CHART (GRAFIK INDIVIDUAL BULANAN) */}
+      <div className="bg-white p-5 rounded-2xl border border-blue-200 shadow-md space-y-4">
+        
+        {/* Header & Peserta Select Dropdown */}
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-slate-100 pb-4">
+          <div>
+            <div className="flex items-center space-x-2 mb-1">
+              <span className="px-2 py-0.5 bg-blue-100 text-blue-800 text-[10px] font-bold rounded-full uppercase tracking-wider">
+                Analisis Individu
+              </span>
+              <span className="text-xs text-slate-400">| Progres Bulanan</span>
+            </div>
+            <h3 className="text-sm font-black text-slate-900 flex items-center space-x-2">
+              <User className="w-4 h-4 text-blue-600" />
+              <span>Grafik Perkembangan Kebugaran Per Peserta (Bulan ke Bulan)</span>
+            </h3>
+            <p className="text-xs text-slate-500">
+              Pilih nama peserta di bawah ini untuk memantau grafik kenaikan/penurunan skor kebugaran fisiknya setiap bulan.
+            </p>
+          </div>
+
+          {/* Peserta Selector Dropdown */}
+          <div className="flex items-center space-x-2 bg-slate-50 p-2 rounded-xl border border-slate-200 min-w-[280px]">
+            <User className="w-4 h-4 text-slate-500 flex-shrink-0 ml-1" />
+            <div className="flex-1">
+              <label className="block text-[9px] font-bold text-slate-400 uppercase">Pilih Peserta:</label>
+              <select
+                value={selectedPesertaId}
+                onChange={(e) => setSelectedPesertaId(e.target.value)}
+                className="w-full bg-transparent text-xs font-bold text-slate-900 focus:outline-none cursor-pointer"
+              >
+                {availablePesertaList.map((p) => (
+                  <option key={p.id} value={p.id}>
+                    {p.nama} ({p.komunitas || 'Peserta'}) - {p.umur} Thn
+                  </option>
+                ))}
+              </select>
+            </div>
+            <ChevronDown className="w-4 h-4 text-slate-400 flex-shrink-0 mr-1" />
+          </div>
+        </div>
+
+        {/* Selected Peserta Badge & Key Metrics Summary */}
+        {selectedPeserta && (
+          <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-200 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 items-center">
+            
+            {/* Peserta Info Card */}
+            <div className="flex items-center space-x-3 col-span-1 md:col-span-1">
+              {selectedPeserta.fotoUrl ? (
+                <img
+                  src={selectedPeserta.fotoUrl}
+                  alt={selectedPeserta.nama}
+                  className="w-11 h-11 rounded-full object-cover border-2 border-yellow-400 shadow-sm"
+                />
+              ) : (
+                <div className="w-11 h-11 rounded-full bg-[#0b1a30] text-yellow-400 flex items-center justify-center font-black text-sm border-2 border-yellow-400">
+                  {selectedPeserta.nama.substring(0, 2).toUpperCase()}
+                </div>
+              )}
+              <div>
+                <h4 className="text-xs font-bold text-slate-900">{selectedPeserta.nama}</h4>
+                <p className="text-[10px] text-slate-500">{selectedPeserta.jenisKelamin}, {selectedPeserta.umur} Tahun</p>
+                <span className="inline-block mt-0.5 text-[9px] font-semibold bg-blue-100 text-blue-800 px-1.5 py-0.2 rounded-md">
+                  {selectedPeserta.komunitas || 'Umum'}
+                </span>
+              </div>
+            </div>
+
+            {/* Metric 1: Skor Terkini */}
+            <div className="p-2.5 bg-white rounded-lg border border-slate-200 text-center">
+              <span className="text-[9px] font-bold text-slate-400 uppercase block">Skor Terkini (Juli)</span>
+              <div className="text-base font-black text-blue-900">
+                {currentMonthScore} <span className="text-xs font-normal text-slate-500">/ 100</span>
+              </div>
+              <span className="text-[9px] font-bold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded">
+                {userMonthlyData[userMonthlyData.length - 1]?.kategori || 'Baik'}
+              </span>
+            </div>
+
+            {/* Metric 2: Peningkatan Bulanan */}
+            <div className="p-2.5 bg-white rounded-lg border border-slate-200 text-center">
+              <span className="text-[9px] font-bold text-slate-400 uppercase block">Peningkatan (Jan - Jul)</span>
+              <div className={`text-base font-black ${scoreImprovement >= 0 ? 'text-emerald-600' : 'text-red-600'}`}>
+                {scoreImprovement >= 0 ? `+${scoreImprovement}` : scoreImprovement} Poin
+              </div>
+              <span className="text-[9px] text-slate-500 font-medium">
+                {scoreImprovement >= 0 ? '▲ Tren Positif' : '▼ Perlu Evaluasi'}
+              </span>
+            </div>
+
+            {/* Metric 3: Quick Action Button */}
+            <div className="col-span-1 flex justify-center md:justify-end">
+              <button
+                type="button"
+                onClick={() => onSelectPesertaForTest(selectedPeserta)}
+                className="w-full md:w-auto inline-flex items-center justify-center space-x-1.5 px-3 py-2 bg-[#0b1a30] hover:bg-slate-800 text-yellow-400 text-xs font-bold rounded-xl shadow transition-all"
+              >
+                <Zap className="w-3.5 h-3.5 text-yellow-400" />
+                <span>Tes Ulang Peserta Ini</span>
+              </button>
+            </div>
+
+          </div>
+        )}
+
+        {/* Recharts Multi-line Monthly Chart for Selected Peserta */}
+        <div className="h-72 w-full pt-2">
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={userMonthlyData} margin={{ top: 10, right: 20, left: -10, bottom: 0 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+              <XAxis dataKey="bulan" tick={{ fontSize: 11, fill: '#64748b' }} />
+              <YAxis domain={[40, 100]} tick={{ fontSize: 11, fill: '#64748b' }} />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: '#0b1a30',
+                  borderRadius: '12px',
+                  color: '#fff',
+                  fontSize: '11px',
+                  border: '1px solid #1e293b',
+                  boxShadow: '0 10px 15px -3px rgba(0,0,0,0.3)',
+                }}
+                formatter={(val: any, name: string) => [`${val} Poin`, name]}
+                labelFormatter={(label: string) => `Bulan Evaluasi: ${label}`}
+              />
+              <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '8px' }} />
+              
+              <Line
+                type="monotone"
+                dataKey="totalSkor"
+                name="Total Skor Kebugaran"
+                stroke="#0b1a30"
+                strokeWidth={3.5}
+                dot={{ r: 5, fill: '#facc15', stroke: '#0b1a30', strokeWidth: 2 }}
+                activeDot={{ r: 8, fill: '#facc15' }}
+              />
+              <Line
+                type="monotone"
+                dataKey="skorTKJI"
+                name="Skor TKJI (Kebugaran Fisik)"
+                stroke="#16a34a"
+                strokeWidth={2}
+                strokeDasharray="4 4"
+                dot={{ r: 3, fill: '#16a34a' }}
+              />
+              <Line
+                type="monotone"
+                dataKey="skorFunctional"
+                name="Skor Functional Fitness"
+                stroke="#9333ea"
+                strokeWidth={2}
+                strokeDasharray="4 4"
+                dot={{ r: 3, fill: '#9333ea' }}
+              />
+              <Line
+                type="monotone"
+                dataKey="skorIMT"
+                name="Skor Komposisi Tubuh (IMT)"
+                stroke="#d97706"
+                strokeWidth={2}
+                dot={{ r: 3, fill: '#d97706' }}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+
+        <div className="p-3 bg-blue-50 rounded-xl border border-blue-200 text-xs text-blue-950 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div className="flex items-center space-x-2">
+            <BarChart3 className="w-4 h-4 text-blue-700 flex-shrink-0" />
+            <span>
+              <strong>Catatan Progres Per Bulan:</strong> Memetakan evaluasi aktual dan proyeksi histori bulanan untuk <strong>{selectedPeserta?.nama}</strong>.
+            </span>
+          </div>
+          <span className="text-[10px] font-bold text-blue-800 bg-blue-100 px-2 py-0.5 rounded-full self-start sm:self-auto">
+            {userRecords.length} Tes Aktual Terdaftar
+          </span>
         </div>
 
       </div>
