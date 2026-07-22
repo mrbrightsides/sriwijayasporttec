@@ -71,7 +71,11 @@ export const Screen4HitungIMT: React.FC<Screen4HitungIMTProps> = ({
                     max="220"
                     required
                     value={tinggiBadan}
-                    onChange={(e) => setTinggiBadan(Number(e.target.value))}
+                    onChange={(e) => {
+                      const val = e.target.value.replace(/^0+(?=\d)/, '');
+                      e.target.value = val;
+                      setTinggiBadan(val === '' ? 0 : Number(val));
+                    }}
                     className="w-full px-3 py-2.5 text-xs bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-yellow-500 font-bold text-slate-800"
                   />
                   <span className="absolute right-3 top-2.5 text-xs font-bold text-slate-400">cm</span>
@@ -89,7 +93,11 @@ export const Screen4HitungIMT: React.FC<Screen4HitungIMTProps> = ({
                     max="200"
                     required
                     value={beratBadan}
-                    onChange={(e) => setBeratBadan(Number(e.target.value))}
+                    onChange={(e) => {
+                      const val = e.target.value.replace(/^0+(?=\d)/, '');
+                      e.target.value = val;
+                      setBeratBadan(val === '' ? 0 : Number(val));
+                    }}
                     className="w-full px-3 py-2.5 text-xs bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-yellow-500 font-bold text-slate-800"
                   />
                   <span className="absolute right-3 top-2.5 text-xs font-bold text-slate-400">kg</span>

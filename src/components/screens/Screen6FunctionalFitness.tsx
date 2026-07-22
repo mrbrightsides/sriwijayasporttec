@@ -102,7 +102,11 @@ export const Screen6FunctionalFitness: React.FC<Screen6FunctionalFitnessProps> =
               min="0"
               max="80"
               value={sitToStand}
-              onChange={(e) => setSitToStand(Number(e.target.value))}
+              onChange={(e) => {
+                const val = e.target.value.replace(/^0+(?=\d)/, '');
+                e.target.value = val;
+                setSitToStand(val === '' ? 0 : Number(val));
+              }}
               className="w-full px-3 py-2 text-xs bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-yellow-500 font-bold text-slate-800"
             />
             <div className="text-[10px] text-slate-500 mt-1">Skor Component: {calculated.skorSitToStand}/100</div>
@@ -122,7 +126,11 @@ export const Screen6FunctionalFitness: React.FC<Screen6FunctionalFitnessProps> =
               min="0"
               max="600"
               value={plank}
-              onChange={(e) => setPlank(Number(e.target.value))}
+              onChange={(e) => {
+                const val = e.target.value.replace(/^0+(?=\d)/, '');
+                e.target.value = val;
+                setPlank(val === '' ? 0 : Number(val));
+              }}
               className="w-full px-3 py-2 text-xs bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-yellow-500 font-bold text-slate-800"
             />
             <div className="text-[10px] text-slate-500 mt-1">Skor Component: {calculated.skorPlank}/100</div>
@@ -142,7 +150,11 @@ export const Screen6FunctionalFitness: React.FC<Screen6FunctionalFitnessProps> =
               min="0"
               max="300"
               value={balance}
-              onChange={(e) => setBalance(Number(e.target.value))}
+              onChange={(e) => {
+                const val = e.target.value.replace(/^0+(?=\d)/, '');
+                e.target.value = val;
+                setBalance(val === '' ? 0 : Number(val));
+              }}
               className="w-full px-3 py-2 text-xs bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-yellow-500 font-bold text-slate-800"
             />
             <div className="text-[10px] text-slate-500 mt-1">Skor Component: {calculated.skorBalance}/100</div>
@@ -162,7 +174,11 @@ export const Screen6FunctionalFitness: React.FC<Screen6FunctionalFitnessProps> =
               min="-20"
               max="60"
               value={sitAndReach}
-              onChange={(e) => setSitAndReach(Number(e.target.value))}
+              onChange={(e) => {
+                const val = e.target.value.replace(/^0+(?=\d)/, '');
+                e.target.value = val;
+                setSitAndReach(val === '' ? 0 : Number(val));
+              }}
               className="w-full px-3 py-2 text-xs bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-yellow-500 font-bold text-slate-800"
             />
             <div className="text-[10px] text-slate-500 mt-1">Skor Component: {calculated.skorSitAndReach}/100</div>
@@ -182,7 +198,11 @@ export const Screen6FunctionalFitness: React.FC<Screen6FunctionalFitnessProps> =
               min="50"
               max="200"
               value={stepTestPulse}
-              onChange={(e) => setStepTestPulse(Number(e.target.value))}
+              onChange={(e) => {
+                const val = e.target.value.replace(/^0+(?=\d)/, '');
+                e.target.value = val;
+                setStepTestPulse(val === '' ? 0 : Number(val));
+              }}
               className="w-full px-3 py-2 text-xs bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-yellow-500 font-bold text-slate-800"
             />
             <div className="text-[10px] text-slate-500 mt-1">Skor Component: {calculated.skorStepTest}/100</div>
@@ -203,7 +223,11 @@ export const Screen6FunctionalFitness: React.FC<Screen6FunctionalFitnessProps> =
                   min="40"
                   max="180"
                   value={denyutAwal}
-                  onChange={(e) => setDenyutAwal(Number(e.target.value))}
+                  onChange={(e) => {
+                    const val = e.target.value.replace(/^0+(?=\d)/, '');
+                    e.target.value = val;
+                    setDenyutAwal(val === '' ? 0 : Number(val));
+                  }}
                   className="w-full px-2.5 py-1.5 text-xs bg-white border border-slate-300 rounded-lg font-bold text-slate-800"
                 />
               </div>
@@ -215,7 +239,11 @@ export const Screen6FunctionalFitness: React.FC<Screen6FunctionalFitnessProps> =
                   min="40"
                   max="200"
                   value={denyutAkhir}
-                  onChange={(e) => setDenyutAkhir(Number(e.target.value))}
+                  onChange={(e) => {
+                    const val = e.target.value.replace(/^0+(?=\d)/, '');
+                    e.target.value = val;
+                    setDenyutAkhir(val === '' ? 0 : Number(val));
+                  }}
                   className="w-full px-2.5 py-1.5 text-xs bg-white border border-slate-300 rounded-lg font-bold text-slate-800"
                 />
               </div>

@@ -48,12 +48,41 @@ export const AddPesertaModal: React.FC<AddPesertaModalProps> = ({
     return age > 0 ? age : 25;
   };
 
-  const handleDobChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const dob = e.target.value;
-    const age = calculateAgeFromDob(dob);
+  const MONTHS_INDONESIA = [
+    { value: '01', label: 'Januari' },
+    { value: '02', label: 'Februari' },
+    { value: '03', label: 'Maret' },
+    { value: '04', label: 'April' },
+    { value: '05', label: 'Mei' },
+    { value: '06', label: 'Juni' },
+    { value: '07', label: 'Juli' },
+    { value: '08', label: 'Agustus' },
+    { value: '09', label: 'September' },
+    { value: '10', label: 'Oktober' },
+    { value: '11', label: 'November' },
+    { value: '12', label: 'Desember' },
+  ];
+  const YEARS_LIST = Array.from({ length: 87 }, (_, i) => String(2026 - i));
+  const DAYS_LIST = Array.from({ length: 31 }, (_, i) => String(i + 1).padStart(2, '0'));
+
+  const parts = (formData.tanggalLahir || '2000-01-15').split('-');
+  const selectedYear = parts[0] && parts[0].length === 4 ? parts[0] : '2000';
+  const selectedMonth = parts[1] || '01';
+  const selectedDay = parts[2] || '15';
+
+  const handleDobPartChange = (type: 'day' | 'month' | 'year', val: string) => {
+    let d = selectedDay;
+    let m = selectedMonth;
+    let y = selectedYear;
+    if (type === 'day') d = val;
+    if (type === 'month') m = val;
+    if (type === 'year') y = val;
+
+    const formatted = `${y}-${m.padStart(2, '0')}-${d.padStart(2, '0')}`;
+    const age = calculateAgeFromDob(formatted);
     setFormData((prev) => ({
       ...prev,
-      tanggalLahir: dob,
+      tanggalLahir: formatted,
       umur: age,
     }));
   };
@@ -170,17 +199,51 @@ export const AddPesertaModal: React.FC<AddPesertaModalProps> = ({
               </select>
             </div>
 
-            {/* Tanggal Lahir */}
-            <div>
+            {/* Tanggal Lahir (3 Dropdowns: Tanggal, Bulan, Tahun) */}
+            <div className="sm:col-span-2">
               <label className="block text-slate-700 font-bold mb-1">
-                Tanggal Lahir
+                Tanggal Lahir (Tgl / Bln / Thn)
               </label>
-              <input
-                type="date"
-                value={formData.tanggalLahir}
-                onChange={handleDobChange}
-                className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-yellow-500 font-semibold text-slate-900"
-              />
+              <div className="grid grid-cols-3 gap-2">
+                {/* Tanggal */}
+                <select
+                  value={selectedDay}
+                  onChange={(e) => handleDobPartChange('day', e.target.value)}
+                  className="w-full px-2.5 py-2 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-yellow-500 font-semibold text-slate-900"
+                >
+                  {DAYS_LIST.map((d) => (
+                    <option key={d} value={d}>
+                      Tgl {parseInt(d)}
+                    </option>
+                  ))}
+                </select>
+
+                {/* Bulan */}
+                <select
+                  value={selectedMonth}
+                  onChange={(e) => handleDobPartChange('month', e.target.value)}
+                  className="w-full px-2.5 py-2 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-yellow-500 font-semibold text-slate-900"
+                >
+                  {MONTHS_INDONESIA.map((m) => (
+                    <option key={m.value} value={m.value}>
+                      {m.label}
+                    </option>
+                  ))}
+                </select>
+
+                {/* Tahun */}
+                <select
+                  value={selectedYear}
+                  onChange={(e) => handleDobPartChange('year', e.target.value)}
+                  className="w-full px-2.5 py-2 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-yellow-500 font-bold text-slate-900 text-yellow-800 bg-yellow-50/50"
+                >
+                  {YEARS_LIST.map((y) => (
+                    <option key={y} value={y}>
+                      {y}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
 
             {/* Umur */}
@@ -193,7 +256,11 @@ export const AddPesertaModal: React.FC<AddPesertaModalProps> = ({
                 min="5"
                 max="100"
                 value={formData.umur}
-                onChange={(e) => setFormData({ ...formData, umur: parseInt(e.target.value) || 0 })}
+                onChange={(e) => {
+                  const val = e.target.value.replace(/^0+(?=\d)/, '');
+                  e.target.value = val;
+                  setFormData({ ...formData, umur: val === '' ? 0 : parseInt(val) || 0 });
+                }}
                 className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-yellow-500 font-bold text-slate-900"
               />
             </div>

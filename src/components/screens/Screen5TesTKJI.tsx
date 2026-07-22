@@ -94,7 +94,11 @@ export const Screen5TesTKJI: React.FC<Screen5TesTKJIProps> = ({
                 min="4"
                 max="30"
                 value={lari60m}
-                onChange={(e) => setLari60m(Number(e.target.value))}
+                onChange={(e) => {
+                  const val = e.target.value.replace(/^0+(?=\d)/, '');
+                  e.target.value = val;
+                  setLari60m(val === '' ? 0 : Number(val));
+                }}
                 className="w-full px-3 py-2 text-xs bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-yellow-500 font-bold text-slate-800"
               />
             </div>
@@ -114,7 +118,11 @@ export const Screen5TesTKJI: React.FC<Screen5TesTKJIProps> = ({
                   min="0"
                   max="120"
                   value={pushUp}
-                  onChange={(e) => setPushUp(Number(e.target.value))}
+                  onChange={(e) => {
+                    const val = e.target.value.replace(/^0+(?=\d)/, '');
+                    e.target.value = val;
+                    setPushUp(val === '' ? 0 : Number(val));
+                  }}
                   className="w-full px-3 py-2 text-xs bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-yellow-500 font-bold text-slate-800"
                 />
                 <span className="text-xs font-semibold text-slate-600 whitespace-nowrap">repetisi</span>
@@ -136,7 +144,11 @@ export const Screen5TesTKJI: React.FC<Screen5TesTKJIProps> = ({
                 min="0"
                 max="100"
                 value={sitUp}
-                onChange={(e) => setSitUp(Number(e.target.value))}
+                onChange={(e) => {
+                  const val = e.target.value.replace(/^0+(?=\d)/, '');
+                  e.target.value = val;
+                  setSitUp(val === '' ? 0 : Number(val));
+                }}
                 className="w-full px-3 py-2 text-xs bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-yellow-500 font-bold text-slate-800"
               />
             </div>
@@ -156,7 +168,11 @@ export const Screen5TesTKJI: React.FC<Screen5TesTKJIProps> = ({
                   min="0"
                   max="120"
                   value={verticalJump}
-                  onChange={(e) => setVerticalJump(Number(e.target.value))}
+                  onChange={(e) => {
+                    const val = e.target.value.replace(/^0+(?=\d)/, '');
+                    e.target.value = val;
+                    setVerticalJump(val === '' ? 0 : Number(val));
+                  }}
                   className="w-full px-3 py-2 text-xs bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-yellow-500 font-bold text-slate-800"
                 />
                 <span className="text-xs font-semibold text-slate-600 whitespace-nowrap">cm</span>
@@ -190,7 +206,11 @@ export const Screen5TesTKJI: React.FC<Screen5TesTKJIProps> = ({
                     max="5000"
                     step="50"
                     value={cooper}
-                    onChange={(e) => setCooper(Number(e.target.value))}
+                    onChange={(e) => {
+                      const val = e.target.value.replace(/^0+(?=\d)/, '');
+                      e.target.value = val;
+                      setCooper(val === '' ? 0 : Number(val));
+                    }}
                     className="w-full px-3 py-2 text-xs bg-white border border-amber-300 rounded-xl focus:ring-2 focus:ring-amber-500 font-black text-amber-950"
                   />
                   <span className="absolute right-3 top-2 text-xs font-bold text-slate-500">meter</span>
