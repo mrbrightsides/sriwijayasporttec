@@ -49,7 +49,7 @@ export default function App() {
       ? JSON.parse(saved)
       : {
           username: 'admin_sriwijaya',
-          name: 'Dr. Heru Pratama, M.Or.',
+          name: 'Dr. Arif Hidayat M.Pd',
           role: 'admin',
           institution: 'Universitas Sriwijaya',
           isLoggedIn: true,

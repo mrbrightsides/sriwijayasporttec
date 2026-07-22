@@ -16,7 +16,7 @@ export const Screen1Login: React.FC<Screen1LoginProps> = ({ onLoginSuccess }) =>
     e.preventDefault();
     onLoginSuccess({
       username,
-      name: username === 'admin_sriwijaya' ? 'Dr. Heru Pratama, M.Or.' : username,
+      name: username === 'admin_sriwijaya' ? 'Dr. Arif Hidayat M.Pd' : username,
       role,
       institution: 'Universitas Sriwijaya',
       isLoggedIn: true,
