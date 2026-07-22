@@ -104,7 +104,8 @@ export function createSampleAssessmentRecord(peserta: Peserta, testDate = '10 Me
     isAndi ? 28 : 26,  // Sit and Reach
     isAndi ? 92 : 90,  // Step Test Recovery Pulse
     88,                // Initial pulse
-    110                // Final pulse
+    110,               // Final pulse
+    peserta.jenisKelamin
   );
 
   const evaluation = evaluateSriwijayaSportTec(aktivitas, imt, tkji, functional);

@@ -230,106 +230,192 @@ export function calculateFunctionalFitness(
   sitAndReachCm: number,
   stepTestRecoveryPulse: number,
   denyutNadiAwal: number,
-  denyutNadiAkhir: number
+  denyutNadiAkhir: number,
+  jenisKelamin: 'Laki-laki' | 'Perempuan' = 'Laki-laki'
 ): DataFunctionalFitness {
+  const isMale = jenisKelamin === 'Laki-laki';
   const isTeenGroup = age <= 25; // 17-25 vs 26-35
 
-  const deltaHR = Math.max(0, denyutNadiAwal - denyutNadiAkhir);
+  const deltaHR = Math.abs(denyutNadiAwal - denyutNadiAkhir);
 
-  // a. Sit to Stand
-  let skorSitToStand = 70;
-  if (isTeenGroup) {
-    if (sitToStandRepetisi >= 30) skorSitToStand = 100;
-    else if (sitToStandRepetisi >= 26) skorSitToStand = 85;
-    else if (sitToStandRepetisi >= 20) skorSitToStand = 70;
-    else if (sitToStandRepetisi >= 15) skorSitToStand = 55;
-    else skorSitToStand = 40;
-  } else {
-    if (sitToStandRepetisi >= 28) skorSitToStand = 100;
-    else if (sitToStandRepetisi >= 24) skorSitToStand = 85;
-    else if (sitToStandRepetisi >= 18) skorSitToStand = 70;
-    else if (sitToStandRepetisi >= 14) skorSitToStand = 55;
-    else skorSitToStand = 40;
+  // 1. Sit to Stand (repetisi)
+  let skorSitToStand = 0;
+  if (sitToStandRepetisi > 0) {
+    if (isMale && isTeenGroup) {
+      if (sitToStandRepetisi >= 38) skorSitToStand = 100;
+      else if (sitToStandRepetisi >= 34) skorSitToStand = 80;
+      else if (sitToStandRepetisi >= 30) skorSitToStand = 60;
+      else if (sitToStandRepetisi >= 26) skorSitToStand = 40;
+      else skorSitToStand = 20;
+    } else if (!isMale && isTeenGroup) {
+      if (sitToStandRepetisi >= 36) skorSitToStand = 100;
+      else if (sitToStandRepetisi >= 32) skorSitToStand = 80;
+      else if (sitToStandRepetisi >= 28) skorSitToStand = 60;
+      else if (sitToStandRepetisi >= 24) skorSitToStand = 40;
+      else skorSitToStand = 20;
+    } else if (isMale && !isTeenGroup) {
+      if (sitToStandRepetisi >= 36) skorSitToStand = 100;
+      else if (sitToStandRepetisi >= 32) skorSitToStand = 80;
+      else if (sitToStandRepetisi >= 28) skorSitToStand = 60;
+      else if (sitToStandRepetisi >= 24) skorSitToStand = 40;
+      else skorSitToStand = 20;
+    } else {
+      if (sitToStandRepetisi >= 34) skorSitToStand = 100;
+      else if (sitToStandRepetisi >= 30) skorSitToStand = 80;
+      else if (sitToStandRepetisi >= 26) skorSitToStand = 60;
+      else if (sitToStandRepetisi >= 22) skorSitToStand = 40;
+      else skorSitToStand = 20;
+    }
   }
 
-  // b. Plank
-  let skorPlank = 70;
-  if (isTeenGroup) {
-    if (plankDetik >= 180) skorPlank = 100;
-    else if (plankDetik >= 120) skorPlank = 85;
-    else if (plankDetik >= 60) skorPlank = 70;
-    else if (plankDetik >= 30) skorPlank = 55;
-    else skorPlank = 40;
-  } else {
-    if (plankDetik >= 150) skorPlank = 100;
-    else if (plankDetik >= 100) skorPlank = 85;
-    else if (plankDetik >= 50) skorPlank = 70;
-    else if (plankDetik >= 20) skorPlank = 55;
-    else skorPlank = 40;
+  // 2. Plank (detik)
+  let skorPlank = 0;
+  if (plankDetik > 0) {
+    if (isMale && isTeenGroup) {
+      if (plankDetik >= 180) skorPlank = 100;
+      else if (plankDetik >= 120) skorPlank = 80;
+      else if (plankDetik >= 60) skorPlank = 60;
+      else if (plankDetik >= 30) skorPlank = 40;
+      else skorPlank = 20;
+    } else if (!isMale && isTeenGroup) {
+      if (plankDetik >= 150) skorPlank = 100;
+      else if (plankDetik >= 100) skorPlank = 80;
+      else if (plankDetik >= 60) skorPlank = 60;
+      else if (plankDetik >= 30) skorPlank = 40;
+      else skorPlank = 20;
+    } else if (isMale && !isTeenGroup) {
+      if (plankDetik >= 160) skorPlank = 100;
+      else if (plankDetik >= 110) skorPlank = 80;
+      else if (plankDetik >= 60) skorPlank = 60;
+      else if (plankDetik >= 30) skorPlank = 40;
+      else skorPlank = 20;
+    } else {
+      if (plankDetik >= 140) skorPlank = 100;
+      else if (plankDetik >= 90) skorPlank = 80;
+      else if (plankDetik >= 50) skorPlank = 60;
+      else if (plankDetik >= 20) skorPlank = 40;
+      else skorPlank = 20;
+    }
   }
 
-  // c. Balance 1 Kaki
-  let skorBalance = 70;
-  if (isTeenGroup) {
-    if (balanceDetik >= 60) skorBalance = 100;
-    else if (balanceDetik >= 45) skorBalance = 85;
-    else if (balanceDetik >= 30) skorBalance = 70;
-    else if (balanceDetik >= 15) skorBalance = 55;
-    else skorBalance = 40;
-  } else {
-    if (balanceDetik >= 55) skorBalance = 100;
-    else if (balanceDetik >= 40) skorBalance = 85;
-    else if (balanceDetik >= 25) skorBalance = 70;
-    else if (balanceDetik >= 10) skorBalance = 55;
-    else skorBalance = 40;
+  // 3. Balance 1 Kaki (detik)
+  let skorBalance = 0;
+  if (balanceDetik > 0) {
+    if (isMale && isTeenGroup) {
+      if (balanceDetik >= 60) skorBalance = 100;
+      else if (balanceDetik >= 45) skorBalance = 80;
+      else if (balanceDetik >= 30) skorBalance = 60;
+      else if (balanceDetik >= 15) skorBalance = 40;
+      else skorBalance = 20;
+    } else if (!isMale && isTeenGroup) {
+      if (balanceDetik >= 60) skorBalance = 100;
+      else if (balanceDetik >= 45) skorBalance = 80;
+      else if (balanceDetik >= 30) skorBalance = 60;
+      else if (balanceDetik >= 15) skorBalance = 40;
+      else skorBalance = 20;
+    } else if (isMale && !isTeenGroup) {
+      if (balanceDetik >= 55) skorBalance = 100;
+      else if (balanceDetik >= 40) skorBalance = 80;
+      else if (balanceDetik >= 25) skorBalance = 60;
+      else if (balanceDetik >= 10) skorBalance = 40;
+      else skorBalance = 20;
+    } else {
+      if (balanceDetik >= 55) skorBalance = 100;
+      else if (balanceDetik >= 40) skorBalance = 80;
+      else if (balanceDetik >= 25) skorBalance = 60;
+      else if (balanceDetik >= 10) skorBalance = 40;
+      else skorBalance = 20;
+    }
   }
 
-  // d. Sit and Reach
-  let skorSitAndReach = 70;
-  if (isTeenGroup) {
-    if (sitAndReachCm >= 35) skorSitAndReach = 100;
-    else if (sitAndReachCm >= 26) skorSitAndReach = 85;
-    else if (sitAndReachCm >= 16) skorSitAndReach = 70;
-    else if (sitAndReachCm >= 6) skorSitAndReach = 55;
-    else skorSitAndReach = 40;
-  } else {
-    if (sitAndReachCm >= 32) skorSitAndReach = 100;
-    else if (sitAndReachCm >= 23) skorSitAndReach = 85;
-    else if (sitAndReachCm >= 14) skorSitAndReach = 70;
-    else if (sitAndReachCm >= 5) skorSitAndReach = 55;
-    else skorSitAndReach = 40;
+  // 4. Sit and Reach (cm)
+  let skorSitAndReach = 0;
+  if (sitAndReachCm !== 0) {
+    if (isMale && isTeenGroup) {
+      if (sitAndReachCm >= 35) skorSitAndReach = 100;
+      else if (sitAndReachCm >= 28) skorSitAndReach = 80;
+      else if (sitAndReachCm >= 20) skorSitAndReach = 60;
+      else if (sitAndReachCm >= 12) skorSitAndReach = 40;
+      else skorSitAndReach = 20;
+    } else if (!isMale && isTeenGroup) {
+      if (sitAndReachCm >= 40) skorSitAndReach = 100;
+      else if (sitAndReachCm >= 33) skorSitAndReach = 80;
+      else if (sitAndReachCm >= 25) skorSitAndReach = 60;
+      else if (sitAndReachCm >= 15) skorSitAndReach = 40;
+      else skorSitAndReach = 20;
+    } else if (isMale && !isTeenGroup) {
+      if (sitAndReachCm >= 32) skorSitAndReach = 100;
+      else if (sitAndReachCm >= 25) skorSitAndReach = 80;
+      else if (sitAndReachCm >= 17) skorSitAndReach = 60;
+      else if (sitAndReachCm >= 10) skorSitAndReach = 40;
+      else skorSitAndReach = 20;
+    } else {
+      if (sitAndReachCm >= 38) skorSitAndReach = 100;
+      else if (sitAndReachCm >= 30) skorSitAndReach = 80;
+      else if (sitAndReachCm >= 22) skorSitAndReach = 60;
+      else if (sitAndReachCm >= 12) skorSitAndReach = 40;
+      else skorSitAndReach = 20;
+    }
   }
 
-  // e. YMCA Step Test (Recovery Pulse bpm - lower is better)
-  let skorStepTest = 70;
-  if (isTeenGroup) {
-    if (stepTestRecoveryPulse <= 84) skorStepTest = 100;
-    else if (stepTestRecoveryPulse <= 100) skorStepTest = 85;
-    else if (stepTestRecoveryPulse <= 110) skorStepTest = 70;
-    else if (stepTestRecoveryPulse <= 120) skorStepTest = 55;
-    else skorStepTest = 40;
-  } else {
-    if (stepTestRecoveryPulse <= 86) skorStepTest = 100;
-    else if (stepTestRecoveryPulse <= 103) skorStepTest = 85;
-    else if (stepTestRecoveryPulse <= 113) skorStepTest = 70;
-    else if (stepTestRecoveryPulse <= 123) skorStepTest = 55;
-    else skorStepTest = 40;
+  // 5. Step Test Recovery (bpm) - lower is better
+  let skorStepTest = 0;
+  if (stepTestRecoveryPulse > 0) {
+    if (isMale && isTeenGroup) {
+      if (stepTestRecoveryPulse <= 80) skorStepTest = 100;
+      else if (stepTestRecoveryPulse <= 90) skorStepTest = 80;
+      else if (stepTestRecoveryPulse <= 100) skorStepTest = 60;
+      else if (stepTestRecoveryPulse <= 110) skorStepTest = 40;
+      else skorStepTest = 20;
+    } else if (!isMale && isTeenGroup) {
+      if (stepTestRecoveryPulse <= 82) skorStepTest = 100;
+      else if (stepTestRecoveryPulse <= 92) skorStepTest = 80;
+      else if (stepTestRecoveryPulse <= 102) skorStepTest = 60;
+      else if (stepTestRecoveryPulse <= 112) skorStepTest = 40;
+      else skorStepTest = 20;
+    } else if (isMale && !isTeenGroup) {
+      if (stepTestRecoveryPulse <= 82) skorStepTest = 100;
+      else if (stepTestRecoveryPulse <= 92) skorStepTest = 80;
+      else if (stepTestRecoveryPulse <= 102) skorStepTest = 60;
+      else if (stepTestRecoveryPulse <= 112) skorStepTest = 40;
+      else skorStepTest = 20;
+    } else {
+      if (stepTestRecoveryPulse <= 84) skorStepTest = 100;
+      else if (stepTestRecoveryPulse <= 94) skorStepTest = 80;
+      else if (stepTestRecoveryPulse <= 104) skorStepTest = 60;
+      else if (stepTestRecoveryPulse <= 114) skorStepTest = 40;
+      else skorStepTest = 20;
+    }
   }
 
-  // f. Recovery Heart Rate (Delta HR 1 min)
-  let skorDeltaHR = 70;
-  if (isTeenGroup) {
-    if (deltaHR >= 40) skorDeltaHR = 100;
-    else if (deltaHR >= 30) skorDeltaHR = 85;
-    else if (deltaHR >= 20) skorDeltaHR = 70;
-    else if (deltaHR >= 10) skorDeltaHR = 55;
-    else skorDeltaHR = 40;
-  } else {
-    if (deltaHR >= 35) skorDeltaHR = 100;
-    else if (deltaHR >= 25) skorDeltaHR = 85;
-    else if (deltaHR >= 15) skorDeltaHR = 70;
-    else if (deltaHR >= 5) skorDeltaHR = 55;
-    else skorDeltaHR = 40;
+  // 6. Recovery HR (penurunan 1 menit) (bpm) - higher drop is better
+  let skorDeltaHR = 0;
+  if (denyutNadiAwal > 0 && denyutNadiAkhir > 0) {
+    if (isMale && isTeenGroup) {
+      if (deltaHR >= 40) skorDeltaHR = 100;
+      else if (deltaHR >= 30) skorDeltaHR = 80;
+      else if (deltaHR >= 20) skorDeltaHR = 60;
+      else if (deltaHR >= 10) skorDeltaHR = 40;
+      else skorDeltaHR = 20;
+    } else if (!isMale && isTeenGroup) {
+      if (deltaHR >= 38) skorDeltaHR = 100;
+      else if (deltaHR >= 28) skorDeltaHR = 80;
+      else if (deltaHR >= 18) skorDeltaHR = 60;
+      else if (deltaHR >= 8) skorDeltaHR = 40;
+      else skorDeltaHR = 20;
+    } else if (isMale && !isTeenGroup) {
+      if (deltaHR >= 38) skorDeltaHR = 100;
+      else if (deltaHR >= 28) skorDeltaHR = 80;
+      else if (deltaHR >= 18) skorDeltaHR = 60;
+      else if (deltaHR >= 8) skorDeltaHR = 40;
+      else skorDeltaHR = 20;
+    } else {
+      if (deltaHR >= 35) skorDeltaHR = 100;
+      else if (deltaHR >= 25) skorDeltaHR = 80;
+      else if (deltaHR >= 15) skorDeltaHR = 60;
+      else if (deltaHR >= 5) skorDeltaHR = 40;
+      else skorDeltaHR = 20;
+    }
   }
 
   const sum = skorSitToStand + skorPlank + skorBalance + skorSitAndReach + skorStepTest + skorDeltaHR;

@@ -34,7 +34,8 @@ export const Screen6FunctionalFitness: React.FC<Screen6FunctionalFitnessProps> =
     sitAndReach,
     stepTestPulse,
     denyutAwal,
-    denyutAkhir
+    denyutAkhir,
+    peserta.jenisKelamin
   );
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -251,6 +252,249 @@ export const Screen6FunctionalFitness: React.FC<Screen6FunctionalFitnessProps> =
             <div className="text-[10px] text-slate-500">Skor Delta HR: {calculated.skorDeltaHR}/100</div>
           </div>
 
+        </div>
+
+        {/* Norma Reference Table Collapsible */}
+        <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <Info className="w-4 h-4 text-blue-600" />
+              <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wide">
+                Tabel Norma Functional Fitness ({peserta.jenisKelamin.toUpperCase()} USIA {peserta.umur <= 25 ? '17–25' : '26–35'} TAHUN)
+              </h3>
+            </div>
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-blue-100 text-blue-800">
+              Kategori Aktif
+            </span>
+          </div>
+
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-[11px] border-collapse border border-slate-200">
+              <thead>
+                <tr className="bg-[#0b1a30] text-white font-bold">
+                  <th className="p-2 border border-slate-700">Komponen</th>
+                  <th className="p-2 border border-slate-700 text-center text-emerald-400">Sangat Baik (100)</th>
+                  <th className="p-2 border border-slate-700 text-center text-blue-400">Baik (80)</th>
+                  <th className="p-2 border border-slate-700 text-center text-amber-400">Cukup (60)</th>
+                  <th className="p-2 border border-slate-700 text-center text-orange-400">Kurang (40)</th>
+                  <th className="p-2 border border-slate-700 text-center text-rose-400">Sangat Kurang (20)</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-200 bg-white font-medium text-slate-700">
+                {peserta.jenisKelamin === 'Laki-laki' && peserta.umur <= 25 && (
+                  <>
+                    <tr>
+                      <td className="p-2 font-bold border border-slate-200">Sit to Stand 30s (rep)</td>
+                      <td className="p-2 text-center border border-slate-200 font-bold">≥38</td>
+                      <td className="p-2 text-center border border-slate-200">34–37</td>
+                      <td className="p-2 text-center border border-slate-200">30–33</td>
+                      <td className="p-2 text-center border border-slate-200">26–29</td>
+                      <td className="p-2 text-center border border-slate-200">≤25</td>
+                    </tr>
+                    <tr>
+                      <td className="p-2 font-bold border border-slate-200">Plank (detik)</td>
+                      <td className="p-2 text-center border border-slate-200 font-bold">≥180</td>
+                      <td className="p-2 text-center border border-slate-200">120–179</td>
+                      <td className="p-2 text-center border border-slate-200">60–119</td>
+                      <td className="p-2 text-center border border-slate-200">30–59</td>
+                      <td className="p-2 text-center border border-slate-200">&lt;30</td>
+                    </tr>
+                    <tr>
+                      <td className="p-2 font-bold border border-slate-200">Balance 1 kaki (detik)</td>
+                      <td className="p-2 text-center border border-slate-200 font-bold">≥60</td>
+                      <td className="p-2 text-center border border-slate-200">45–59</td>
+                      <td className="p-2 text-center border border-slate-200">30–44</td>
+                      <td className="p-2 text-center border border-slate-200">15–29</td>
+                      <td className="p-2 text-center border border-slate-200">&lt;15</td>
+                    </tr>
+                    <tr>
+                      <td className="p-2 font-bold border border-slate-200">Sit and Reach (cm)</td>
+                      <td className="p-2 text-center border border-slate-200 font-bold">≥35</td>
+                      <td className="p-2 text-center border border-slate-200">28–34</td>
+                      <td className="p-2 text-center border border-slate-200">20–27</td>
+                      <td className="p-2 text-center border border-slate-200">12–19</td>
+                      <td className="p-2 text-center border border-slate-200">&lt;12</td>
+                    </tr>
+                    <tr>
+                      <td className="p-2 font-bold border border-slate-200">Step Test Recovery (bpm)</td>
+                      <td className="p-2 text-center border border-slate-200 font-bold">≤80</td>
+                      <td className="p-2 text-center border border-slate-200">81–90</td>
+                      <td className="p-2 text-center border border-slate-200">91–100</td>
+                      <td className="p-2 text-center border border-slate-200">101–110</td>
+                      <td className="p-2 text-center border border-slate-200">&gt;110</td>
+                    </tr>
+                    <tr>
+                      <td className="p-2 font-bold border border-slate-200">Recovery HR (penurunan 1 min)</td>
+                      <td className="p-2 text-center border border-slate-200 font-bold">≥40 bpm</td>
+                      <td className="p-2 text-center border border-slate-200">30–39</td>
+                      <td className="p-2 text-center border border-slate-200">20–29</td>
+                      <td className="p-2 text-center border border-slate-200">10–19</td>
+                      <td className="p-2 text-center border border-slate-200">&lt;10</td>
+                    </tr>
+                  </>
+                )}
+
+                {peserta.jenisKelamin === 'Perempuan' && peserta.umur <= 25 && (
+                  <>
+                    <tr>
+                      <td className="p-2 font-bold border border-slate-200">Sit to Stand 30s (rep)</td>
+                      <td className="p-2 text-center border border-slate-200 font-bold">≥36</td>
+                      <td className="p-2 text-center border border-slate-200">32–35</td>
+                      <td className="p-2 text-center border border-slate-200">28–31</td>
+                      <td className="p-2 text-center border border-slate-200">24–27</td>
+                      <td className="p-2 text-center border border-slate-200">≤23</td>
+                    </tr>
+                    <tr>
+                      <td className="p-2 font-bold border border-slate-200">Plank (detik)</td>
+                      <td className="p-2 text-center border border-slate-200 font-bold">≥150</td>
+                      <td className="p-2 text-center border border-slate-200">100–149</td>
+                      <td className="p-2 text-center border border-slate-200">60–99</td>
+                      <td className="p-2 text-center border border-slate-200">30–59</td>
+                      <td className="p-2 text-center border border-slate-200">&lt;30</td>
+                    </tr>
+                    <tr>
+                      <td className="p-2 font-bold border border-slate-200">Balance 1 kaki (detik)</td>
+                      <td className="p-2 text-center border border-slate-200 font-bold">≥60</td>
+                      <td className="p-2 text-center border border-slate-200">45–59</td>
+                      <td className="p-2 text-center border border-slate-200">30–44</td>
+                      <td className="p-2 text-center border border-slate-200">15–29</td>
+                      <td className="p-2 text-center border border-slate-200">&lt;15</td>
+                    </tr>
+                    <tr>
+                      <td className="p-2 font-bold border border-slate-200">Sit and Reach (cm)</td>
+                      <td className="p-2 text-center border border-slate-200 font-bold">≥40</td>
+                      <td className="p-2 text-center border border-slate-200">33–39</td>
+                      <td className="p-2 text-center border border-slate-200">25–32</td>
+                      <td className="p-2 text-center border border-slate-200">15–24</td>
+                      <td className="p-2 text-center border border-slate-200">&lt;15</td>
+                    </tr>
+                    <tr>
+                      <td className="p-2 font-bold border border-slate-200">Step Test Recovery (bpm)</td>
+                      <td className="p-2 text-center border border-slate-200 font-bold">≤82</td>
+                      <td className="p-2 text-center border border-slate-200">83–92</td>
+                      <td className="p-2 text-center border border-slate-200">93–102</td>
+                      <td className="p-2 text-center border border-slate-200">103–112</td>
+                      <td className="p-2 text-center border border-slate-200">&gt;112</td>
+                    </tr>
+                    <tr>
+                      <td className="p-2 font-bold border border-slate-200">Recovery HR (penurunan 1 min)</td>
+                      <td className="p-2 text-center border border-slate-200 font-bold">≥38 bpm</td>
+                      <td className="p-2 text-center border border-slate-200">28–37</td>
+                      <td className="p-2 text-center border border-slate-200">18–27</td>
+                      <td className="p-2 text-center border border-slate-200">8–17</td>
+                      <td className="p-2 text-center border border-slate-200">&lt;8</td>
+                    </tr>
+                  </>
+                )}
+
+                {peserta.jenisKelamin === 'Laki-laki' && peserta.umur > 25 && (
+                  <>
+                    <tr>
+                      <td className="p-2 font-bold border border-slate-200">Sit to Stand 30s (rep)</td>
+                      <td className="p-2 text-center border border-slate-200 font-bold">≥36</td>
+                      <td className="p-2 text-center border border-slate-200">32–35</td>
+                      <td className="p-2 text-center border border-slate-200">28–31</td>
+                      <td className="p-2 text-center border border-slate-200">24–27</td>
+                      <td className="p-2 text-center border border-slate-200">≤23</td>
+                    </tr>
+                    <tr>
+                      <td className="p-2 font-bold border border-slate-200">Plank (detik)</td>
+                      <td className="p-2 text-center border border-slate-200 font-bold">≥160</td>
+                      <td className="p-2 text-center border border-slate-200">110–159</td>
+                      <td className="p-2 text-center border border-slate-200">60–109</td>
+                      <td className="p-2 text-center border border-slate-200">30–59</td>
+                      <td className="p-2 text-center border border-slate-200">&lt;30</td>
+                    </tr>
+                    <tr>
+                      <td className="p-2 font-bold border border-slate-200">Balance 1 kaki (detik)</td>
+                      <td className="p-2 text-center border border-slate-200 font-bold">≥55</td>
+                      <td className="p-2 text-center border border-slate-200">40–54</td>
+                      <td className="p-2 text-center border border-slate-200">25–39</td>
+                      <td className="p-2 text-center border border-slate-200">10–24</td>
+                      <td className="p-2 text-center border border-slate-200">&lt;10</td>
+                    </tr>
+                    <tr>
+                      <td className="p-2 font-bold border border-slate-200">Sit and Reach (cm)</td>
+                      <td className="p-2 text-center border border-slate-200 font-bold">≥32</td>
+                      <td className="p-2 text-center border border-slate-200">25–31</td>
+                      <td className="p-2 text-center border border-slate-200">17–24</td>
+                      <td className="p-2 text-center border border-slate-200">10–16</td>
+                      <td className="p-2 text-center border border-slate-200">&lt;10</td>
+                    </tr>
+                    <tr>
+                      <td className="p-2 font-bold border border-slate-200">Step Test Recovery (bpm)</td>
+                      <td className="p-2 text-center border border-slate-200 font-bold">≤82</td>
+                      <td className="p-2 text-center border border-slate-200">83–92</td>
+                      <td className="p-2 text-center border border-slate-200">93–102</td>
+                      <td className="p-2 text-center border border-slate-200">103–112</td>
+                      <td className="p-2 text-center border border-slate-200">&gt;112</td>
+                    </tr>
+                    <tr>
+                      <td className="p-2 font-bold border border-slate-200">Recovery HR (penurunan 1 min)</td>
+                      <td className="p-2 text-center border border-slate-200 font-bold">≥38 bpm</td>
+                      <td className="p-2 text-center border border-slate-200">28–37</td>
+                      <td className="p-2 text-center border border-slate-200">18–27</td>
+                      <td className="p-2 text-center border border-slate-200">8–17</td>
+                      <td className="p-2 text-center border border-slate-200">&lt;8</td>
+                    </tr>
+                  </>
+                )}
+
+                {peserta.jenisKelamin === 'Perempuan' && peserta.umur > 25 && (
+                  <>
+                    <tr>
+                      <td className="p-2 font-bold border border-slate-200">Sit to Stand 30s (rep)</td>
+                      <td className="p-2 text-center border border-slate-200 font-bold">≥34</td>
+                      <td className="p-2 text-center border border-slate-200">30–33</td>
+                      <td className="p-2 text-center border border-slate-200">26–29</td>
+                      <td className="p-2 text-center border border-slate-200">22–25</td>
+                      <td className="p-2 text-center border border-slate-200">≤21</td>
+                    </tr>
+                    <tr>
+                      <td className="p-2 font-bold border border-slate-200">Plank (detik)</td>
+                      <td className="p-2 text-center border border-slate-200 font-bold">≥140</td>
+                      <td className="p-2 text-center border border-slate-200">90–139</td>
+                      <td className="p-2 text-center border border-slate-200">50–89</td>
+                      <td className="p-2 text-center border border-slate-200">20–49</td>
+                      <td className="p-2 text-center border border-slate-200">&lt;20</td>
+                    </tr>
+                    <tr>
+                      <td className="p-2 font-bold border border-slate-200">Balance 1 kaki (detik)</td>
+                      <td className="p-2 text-center border border-slate-200 font-bold">≥55</td>
+                      <td className="p-2 text-center border border-slate-200">40–54</td>
+                      <td className="p-2 text-center border border-slate-200">25–39</td>
+                      <td className="p-2 text-center border border-slate-200">10–24</td>
+                      <td className="p-2 text-center border border-slate-200">&lt;10</td>
+                    </tr>
+                    <tr>
+                      <td className="p-2 font-bold border border-slate-200">Sit and Reach (cm)</td>
+                      <td className="p-2 text-center border border-slate-200 font-bold">≥38</td>
+                      <td className="p-2 text-center border border-slate-200">30–37</td>
+                      <td className="p-2 text-center border border-slate-200">22–29</td>
+                      <td className="p-2 text-center border border-slate-200">12–21</td>
+                      <td className="p-2 text-center border border-slate-200">&lt;12</td>
+                    </tr>
+                    <tr>
+                      <td className="p-2 font-bold border border-slate-200">Step Test Recovery (bpm)</td>
+                      <td className="p-2 text-center border border-slate-200 font-bold">≤84</td>
+                      <td className="p-2 text-center border border-slate-200">85–94</td>
+                      <td className="p-2 text-center border border-slate-200">95–104</td>
+                      <td className="p-2 text-center border border-slate-200">105–114</td>
+                      <td className="p-2 text-center border border-slate-200">&gt;114</td>
+                    </tr>
+                    <tr>
+                      <td className="p-2 font-bold border border-slate-200">Recovery HR (penurunan 1 min)</td>
+                      <td className="p-2 text-center border border-slate-200 font-bold">≥35 bpm</td>
+                      <td className="p-2 text-center border border-slate-200">25–34</td>
+                      <td className="p-2 text-center border border-slate-200">15–24</td>
+                      <td className="p-2 text-center border border-slate-200">5–14</td>
+                      <td className="p-2 text-center border border-slate-200">&lt;5</td>
+                    </tr>
+                  </>
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
 
         {/* Buttons */}
