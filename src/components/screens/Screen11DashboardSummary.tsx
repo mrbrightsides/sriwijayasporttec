@@ -32,6 +32,7 @@ import {
   Users
 } from 'lucide-react';
 import { ReTestReminderPanel } from '../ReTestReminderPanel';
+import { DailyFitnessTipsPanel } from '../DailyFitnessTipsPanel';
 import { UnsriLogo } from '../UnsriLogo';
 import { exportAssessmentRecordsToCSV } from '../../utils/exportCsv';
 
@@ -169,6 +170,9 @@ export const Screen11DashboardSummary: React.FC<Screen11DashboardSummaryProps> =
         pesertaList={pesertaList}
         onSelectPesertaForTest={onSelectPesertaForTest}
       />
+
+      {/* 2B. DAILY FITNESS TIPS & MOTIVATION MODULE */}
+      <DailyFitnessTipsPanel />
 
       {/* 3. Stat Cards Grid */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
