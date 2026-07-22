@@ -8,7 +8,7 @@ interface DataPesertaListProps {
   pesertaList: Peserta[];
   records: AssessmentRecord[];
   onSelectPesertaForTest: (peserta: Peserta) => void;
-  onViewReport: (record: AssessmentRecord) => void;
+  onViewReport: (peserta: Peserta, record?: AssessmentRecord) => void;
   onAddNewPeserta: () => void;
   onSavePeserta: (peserta: Peserta) => void;
   onDeletePeserta: (id: string) => void;
@@ -164,15 +164,13 @@ export const DataPesertaList: React.FC<DataPesertaListProps> = ({
                       </td>
 
                       <td className="p-3.5 text-right space-x-2">
-                        {record && (
-                          <button
-                            onClick={() => onViewReport(record)}
-                            className="px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-[11px] rounded-lg transition-colors inline-flex items-center space-x-1"
-                          >
-                            <FileText className="w-3.5 h-3.5 text-blue-600" />
-                            <span>Laporan</span>
-                          </button>
-                        )}
+                        <button
+                          onClick={() => onViewReport(p, record)}
+                          className="px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-[11px] rounded-lg transition-colors inline-flex items-center space-x-1 border border-slate-200"
+                        >
+                          <FileText className="w-3.5 h-3.5 text-blue-600" />
+                          <span>Laporan</span>
+                        </button>
 
                         <button
                           onClick={() => onSelectPesertaForTest(p)}

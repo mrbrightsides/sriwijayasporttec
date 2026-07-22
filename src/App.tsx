@@ -182,6 +182,7 @@ export default function App() {
       // default template
       setCurrentIMT(calculateIMT(170, 68));
     }
+    setActiveTab('tes');
     setActiveStep(3); // Start test at Aktivitas Fisik
   };
 
@@ -222,12 +223,17 @@ export default function App() {
           pesertaList={pesertaList}
           records={records}
           onSelectPesertaForTest={handleSelectPesertaForTest}
-          onViewReport={(rec) => {
-            setCurrentPeserta(rec.peserta);
-            setCurrentAktivitas(rec.aktivitas);
-            setCurrentIMT(rec.imt);
-            setCurrentTKJI(rec.tkji);
-            setCurrentFunctional(rec.functional);
+          onViewReport={(peserta, rec) => {
+            setCurrentPeserta(peserta);
+            if (rec) {
+              setCurrentAktivitas(rec.aktivitas);
+              setCurrentIMT(rec.imt);
+              setCurrentTKJI(rec.tkji);
+              setCurrentFunctional(rec.functional);
+            } else {
+              setCurrentIMT(calculateIMT(170, 68));
+            }
+            setActiveTab('laporan');
             setActiveStep(10);
           }}
           onAddNewPeserta={handleAddNewPeserta}
