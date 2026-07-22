@@ -189,16 +189,17 @@ export default function App() {
     const newId = `P${String(pesertaList.length + 1).padStart(3, '0')}`;
     const newPeserta: Peserta = {
       id: newId,
-      nama: 'Peserta Baru',
+      nama: '',
       jenisKelamin: 'Laki-laki',
       tanggalLahir: '1998-05-10',
       umur: 28,
       komunitas: 'Runner Palembang',
-      noHp: '0812-0000-0000',
+      noHp: '',
       alamat: 'Palembang, Sumatera Selatan',
       createdAt: new Date().toISOString().split('T')[0],
     };
     setCurrentPeserta(newPeserta);
+    setActiveTab('tes');
     setActiveStep(2);
   };
 
@@ -230,6 +231,7 @@ export default function App() {
             setActiveStep(10);
           }}
           onAddNewPeserta={handleAddNewPeserta}
+          onSavePeserta={handleSavePeserta}
           onDeletePeserta={handleDeletePeserta}
         />
       );

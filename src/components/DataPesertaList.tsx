@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { AssessmentRecord, Peserta } from '../types';
 import { Download, FileText, Plus, Search, Trash2, UserCheck, Users } from 'lucide-react';
 import { exportAssessmentRecordsToCSV, exportPesertaListToCSV } from '../utils/exportCsv';
+import { AddPesertaModal } from './AddPesertaModal';
 
 interface DataPesertaListProps {
   pesertaList: Peserta[];
@@ -9,6 +10,7 @@ interface DataPesertaListProps {
   onSelectPesertaForTest: (peserta: Peserta) => void;
   onViewReport: (record: AssessmentRecord) => void;
   onAddNewPeserta: () => void;
+  onSavePeserta: (peserta: Peserta) => void;
   onDeletePeserta: (id: string) => void;
 }
 
@@ -18,10 +20,12 @@ export const DataPesertaList: React.FC<DataPesertaListProps> = ({
   onSelectPesertaForTest,
   onViewReport,
   onAddNewPeserta,
+  onSavePeserta,
   onDeletePeserta,
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterCommunity, setFilterCommunity] = useState<string>('all');
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
   const filtered = pesertaList.filter((p) => {
     const matchesSearch =
@@ -33,6 +37,14 @@ export const DataPesertaList: React.FC<DataPesertaListProps> = ({
   });
 
   const communities = Array.from(new Set(pesertaList.map((p) => p.komunitas)));
+
+  const handleOpenAddModal = () => {
+    setIsAddModalOpen(true);
+  };
+
+  const handleSaveModalPeserta = (newPeserta: Peserta) => {
+    onSavePeserta(newPeserta);
+  };
 
   return (
     <div className="max-w-6xl mx-auto space-y-6">
@@ -60,7 +72,7 @@ export const DataPesertaList: React.FC<DataPesertaListProps> = ({
           </button>
 
           <button
-            onClick={onAddNewPeserta}
+            onClick={handleOpenAddModal}
             className="inline-flex items-center space-x-2 px-4 py-2.5 bg-[#0b1a30] hover:bg-[#122847] text-yellow-400 font-bold text-xs rounded-xl shadow-md transition-all"
           >
             <Plus className="w-4 h-4" />
@@ -185,6 +197,14 @@ export const DataPesertaList: React.FC<DataPesertaListProps> = ({
           </table>
         </div>
       </div>
+
+      {/* Add Peserta Modal */}
+      <AddPesertaModal
+        isOpen={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+        onSave={handleSaveModalPeserta}
+        existingCount={pesertaList.length}
+      />
 
     </div>
   );
