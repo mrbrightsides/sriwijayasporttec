@@ -1,0 +1,6 @@
+{
+  "name": "Sriwijaya Sport Tec",
+  "description": "Sistem Monitoring Kebugaran Olahraga Masyarakat Berbasis Web",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
