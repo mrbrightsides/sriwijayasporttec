@@ -18,8 +18,8 @@ export const Screen4HitungIMT: React.FC<Screen4HitungIMTProps> = ({
   onPrev,
   onNext,
 }) => {
-  const [tinggiBadan, setTinggiBadan] = useState<number>(currentIMT.tinggiBadan || 170);
-  const [beratBadan, setBeratBadan] = useState<number>(currentIMT.beratBadan || 68);
+  const [tinggiBadan, setTinggiBadan] = useState<number>(currentIMT.tinggiBadan || 0);
+  const [beratBadan, setBeratBadan] = useState<number>(currentIMT.beratBadan || 0);
 
   const calculated = calculateIMT(tinggiBadan, beratBadan);
 
@@ -67,9 +67,8 @@ export const Screen4HitungIMT: React.FC<Screen4HitungIMTProps> = ({
                 <div className="relative">
                   <input
                     type="number"
-                    min="100"
+                    min="0"
                     max="220"
-                    required
                     value={tinggiBadan}
                     onChange={(e) => {
                       const val = e.target.value.replace(/^0+(?=\d)/, '');
@@ -89,9 +88,8 @@ export const Screen4HitungIMT: React.FC<Screen4HitungIMTProps> = ({
                 <div className="relative">
                   <input
                     type="number"
-                    min="30"
+                    min="0"
                     max="200"
-                    required
                     value={beratBadan}
                     onChange={(e) => {
                       const val = e.target.value.replace(/^0+(?=\d)/, '');

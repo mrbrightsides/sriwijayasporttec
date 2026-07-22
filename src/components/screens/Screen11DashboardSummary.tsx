@@ -79,26 +79,20 @@ export const Screen11DashboardSummary: React.FC<Screen11DashboardSummaryProps> =
 
   const latestUserRecord = userRecords[userRecords.length - 1] || userRecords[0];
 
-  // Monthly Data Generation for Selected Peserta
-  const monthsList = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli (Terkini)'];
-  const userRecordMonthMap = new Map<string, AssessmentRecord>();
-  userRecords.forEach((rec) => {
-    const tLower = rec.tanggal.toLowerCase();
-    for (const m of monthsList) {
-      if (tLower.includes(m.split(' ')[0].toLowerCase())) {
-        userRecordMonthMap.set(m, rec);
-        break;
-      }
-    }
-  });
+  // Monthly Data based STRICTLY on actual saved assessment records (No fake mock generated numbers!)
+  const monthsList = [
+    'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+    'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+  ];
 
-  const baseTotal = latestUserRecord ? latestUserRecord.evaluation.totalSkor : 78;
-  const baseTKJI = latestUserRecord ? latestUserRecord.tkji.totalSkorTKJI : 75;
-  const baseFunc = latestUserRecord ? latestUserRecord.functional.totalSkorFunctional : 80;
-  const baseIMT = latestUserRecord ? latestUserRecord.imt.skorIMT : 85;
+  const userMonthlyData = monthsList.map((m) => {
+    // Find real record for this month
+    const realRec = userRecords.find((rec) => {
+      const tLower = (rec.tanggal || '').toLowerCase();
+      const mLower = m.toLowerCase();
+      return tLower.includes(mLower);
+    });
 
-  const userMonthlyData = monthsList.map((m, idx) => {
-    const realRec = userRecordMonthMap.get(m);
     if (realRec) {
       return {
         bulan: m,
@@ -113,28 +107,27 @@ export const Screen11DashboardSummary: React.FC<Screen11DashboardSummaryProps> =
       };
     }
 
-    const factor = (idx + 1) / monthsList.length;
-    const startDelta = 16;
-    const calcTotal = Math.min(100, Math.max(45, Math.round(baseTotal - (1 - factor) * startDelta)));
-    const calcTKJI = Math.min(100, Math.max(45, Math.round(baseTKJI - (1 - factor) * (startDelta + 2))));
-    const calcFunc = Math.min(100, Math.max(45, Math.round(baseFunc - (1 - factor) * (startDelta - 2))));
-    const calcIMT = Math.min(100, Math.max(45, Math.round(baseIMT - (1 - factor) * 3)));
-
+    // No test in this month: strictly 0 without dummy mockup
     return {
       bulan: m,
-      totalSkor: idx === monthsList.length - 1 ? baseTotal : calcTotal,
-      skorTKJI: idx === monthsList.length - 1 ? baseTKJI : calcTKJI,
-      skorFunctional: idx === monthsList.length - 1 ? baseFunc : calcFunc,
-      skorIMT: idx === monthsList.length - 1 ? baseIMT : calcIMT,
-      kategori: idx === monthsList.length - 1 && latestUserRecord ? latestUserRecord.evaluation.kategoriAkhir : 'Baik',
-      isRealTest: idx === monthsList.length - 1 && userRecords.length > 0,
-      tanggalTes: idx === monthsList.length - 1 && latestUserRecord ? latestUserRecord.tanggal : `Data ${m}`,
+      totalSkor: 0,
+      skorTKJI: 0,
+      skorFunctional: 0,
+      skorIMT: 0,
+      skorAktivitas: 0,
+      kategori: '0 (Belum Ada Tes)',
+      isRealTest: false,
+      tanggalTes: '-',
     };
   });
 
-  const firstMonthScore = userMonthlyData[0]?.totalSkor || 60;
-  const currentMonthScore = userMonthlyData[userMonthlyData.length - 1]?.totalSkor || baseTotal;
-  const scoreImprovement = currentMonthScore - firstMonthScore;
+  const testsTaken = userMonthlyData.filter((d) => d.isRealTest);
+  const latestTestedMonth = testsTaken.length > 0 ? testsTaken[testsTaken.length - 1] : null;
+  const currentMonthScore = latestTestedMonth ? latestTestedMonth.totalSkor : 0;
+  const firstTestedMonth = testsTaken.length > 0 ? testsTaken[0] : null;
+  const scoreImprovement = (latestTestedMonth && firstTestedMonth && testsTaken.length > 1)
+    ? latestTestedMonth.totalSkor - firstTestedMonth.totalSkor
+    : 0;
 
   // Aggregation numbers
   const totalPesertaCount = pesertaList.length > 0 ? pesertaList.length : records.length;
@@ -505,7 +498,7 @@ export const Screen11DashboardSummary: React.FC<Screen11DashboardSummaryProps> =
             <LineChart data={userMonthlyData} margin={{ top: 10, right: 20, left: -10, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
               <XAxis dataKey="bulan" tick={{ fontSize: 11, fill: '#64748b' }} />
-              <YAxis domain={[40, 100]} tick={{ fontSize: 11, fill: '#64748b' }} />
+              <YAxis domain={[0, 100]} tick={{ fontSize: 11, fill: '#64748b' }} />
               <Tooltip
                 contentStyle={{
                   backgroundColor: '#0b1a30',
@@ -559,16 +552,83 @@ export const Screen11DashboardSummary: React.FC<Screen11DashboardSummaryProps> =
           </ResponsiveContainer>
         </div>
 
+        {/* Monthly Progression Table / Column Breakdown */}
+        <div className="pt-3 border-t border-slate-100 space-y-2">
+          <div className="flex items-center justify-between">
+            <h4 className="text-xs font-bold text-slate-900 flex items-center space-x-1.5">
+              <Calendar className="w-4 h-4 text-blue-600" />
+              <span>Kolom Perhitungan &amp; Rekapitulasi Progres Bulanan Peserta ({selectedPeserta?.nama})</span>
+            </h4>
+            <span className="text-[10px] text-blue-800 bg-blue-100 px-2.5 py-0.5 rounded-full font-bold">
+              {testsTaken.length} Bulan Terisi Data Tes
+            </span>
+          </div>
+
+          <div className="overflow-x-auto border border-slate-200 rounded-xl shadow-sm bg-white">
+            <table className="w-full text-left text-xs border-collapse">
+              <thead>
+                <tr className="bg-[#0b1a30] text-white text-[11px] font-bold">
+                  <th className="p-2.5">Bulan</th>
+                  <th className="p-2.5">Tanggal Tes</th>
+                  <th className="p-2.5 text-center">Total Skor</th>
+                  <th className="p-2.5 text-center">Skor TKJI</th>
+                  <th className="p-2.5 text-center">Functional Fitness</th>
+                  <th className="p-2.5 text-center">Komposisi IMT</th>
+                  <th className="p-2.5">Status &amp; Kategori</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-200 text-[11px]">
+                {userMonthlyData.map((d, idx) => (
+                  <tr
+                    key={idx}
+                    className={
+                      d.isRealTest
+                        ? 'bg-blue-50/60 hover:bg-blue-50 font-medium text-slate-900'
+                        : 'bg-slate-50/30 text-slate-400'
+                    }
+                  >
+                    <td className="p-2.5 font-bold flex items-center space-x-2">
+                      <span className={`w-2 h-2 rounded-full ${d.isRealTest ? 'bg-emerald-500' : 'bg-slate-300'}`} />
+                      <span>{d.bulan}</span>
+                    </td>
+                    <td className="p-2.5 font-mono text-[10px]">{d.tanggalTes}</td>
+                    <td className="p-2.5 text-center font-black">
+                      {d.isRealTest ? (
+                        <span className="text-blue-900 font-black bg-yellow-100 px-2 py-0.5 rounded text-xs">
+                          {d.totalSkor} / 100
+                        </span>
+                      ) : (
+                        <span className="text-slate-400">0</span>
+                      )}
+                    </td>
+                    <td className="p-2.5 text-center font-bold">{d.skorTKJI}</td>
+                    <td className="p-2.5 text-center font-bold">{d.skorFunctional}</td>
+                    <td className="p-2.5 text-center font-bold">{d.skorIMT}</td>
+                    <td className="p-2.5">
+                      {d.isRealTest ? (
+                        <span className="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">
+                          {d.kategori}
+                        </span>
+                      ) : (
+                        <span className="inline-block px-2 py-0.5 rounded-full text-[10px] font-medium bg-slate-100 text-slate-400">
+                          0 (Belum Tes)
+                        </span>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
         <div className="p-3 bg-blue-50 rounded-xl border border-blue-200 text-xs text-blue-950 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div className="flex items-center space-x-2">
             <BarChart3 className="w-4 h-4 text-blue-700 flex-shrink-0" />
             <span>
-              <strong>Catatan Progres Per Bulan:</strong> Memetakan evaluasi aktual dan proyeksi histori bulanan untuk <strong>{selectedPeserta?.nama}</strong>.
+              <strong>Perhitungan Real-Time:</strong> Data bulanan di atas dihitung 100% secara akurat berdasarkan riwayat tes aktual yang diinput untuk <strong>{selectedPeserta?.nama}</strong>. Bulan tanpa tes ditandai dengan angka 0.
             </span>
           </div>
-          <span className="text-[10px] font-bold text-blue-800 bg-blue-100 px-2 py-0.5 rounded-full self-start sm:self-auto">
-            {userRecords.length} Tes Aktual Terdaftar
-          </span>
         </div>
 
       </div>

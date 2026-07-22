@@ -18,9 +18,9 @@ export const Screen5TesTKJI: React.FC<Screen5TesTKJIProps> = ({
   onPrev,
   onNext,
 }) => {
-  const [cooper, setCooper] = useState<number>(currentTKJI.cooperDistanceMeter || 2500);
-  const [pushUp, setPushUp] = useState<number>(currentTKJI.pushUpRepetisi || 48);
-  const [verticalJump, setVerticalJump] = useState<number>(currentTKJI.verticalJumpCm || 58);
+  const [cooper, setCooper] = useState<number>(currentTKJI.cooperDistanceMeter || 0);
+  const [pushUp, setPushUp] = useState<number>(currentTKJI.pushUpRepetisi || 0);
+  const [verticalJump, setVerticalJump] = useState<number>(currentTKJI.verticalJumpCm || 0);
 
   const calculated = calculateTKJI(peserta.jenisKelamin, cooper, pushUp, verticalJump);
 
@@ -153,7 +153,7 @@ export const Screen5TesTKJI: React.FC<Screen5TesTKJIProps> = ({
                 <div className="relative">
                   <input
                     type="number"
-                    min="500"
+                    min="0"
                     max="5000"
                     step="50"
                     value={cooper}

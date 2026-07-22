@@ -18,13 +18,13 @@ export const Screen6FunctionalFitness: React.FC<Screen6FunctionalFitnessProps> =
   onPrev,
   onNext,
 }) => {
-  const [sitToStand, setSitToStand] = useState<number>(currentFunctional.sitToStandRepetisi || 27);
-  const [plank, setPlank] = useState<number>(currentFunctional.plankDetik || 130);
-  const [balance, setBalance] = useState<number>(currentFunctional.balanceDetik || 50);
-  const [sitAndReach, setSitAndReach] = useState<number>(currentFunctional.sitAndReachCm || 28);
-  const [stepTestPulse, setStepTestPulse] = useState<number>(currentFunctional.stepTestRecoveryPulse || 92);
-  const [denyutAwal, setDenyutAwal] = useState<number>(currentFunctional.denyutNadiAwal || 88);
-  const [denyutAkhir, setDenyutAkhir] = useState<number>(currentFunctional.denyutNadiAkhir || 110);
+  const [sitToStand, setSitToStand] = useState<number>(currentFunctional.sitToStandRepetisi || 0);
+  const [plank, setPlank] = useState<number>(currentFunctional.plankDetik || 0);
+  const [balance, setBalance] = useState<number>(currentFunctional.balanceDetik || 0);
+  const [sitAndReach, setSitAndReach] = useState<number>(currentFunctional.sitAndReachCm || 0);
+  const [stepTestPulse, setStepTestPulse] = useState<number>(currentFunctional.stepTestRecoveryPulse || 0);
+  const [denyutAwal, setDenyutAwal] = useState<number>(currentFunctional.denyutNadiAwal || 0);
+  const [denyutAkhir, setDenyutAkhir] = useState<number>(currentFunctional.denyutNadiAkhir || 0);
 
   const calculated = calculateFunctionalFitness(
     peserta.umur,
@@ -195,7 +195,7 @@ export const Screen6FunctionalFitness: React.FC<Screen6FunctionalFitnessProps> =
             </div>
             <input
               type="number"
-              min="50"
+              min="0"
               max="200"
               value={stepTestPulse}
               onChange={(e) => {
@@ -220,7 +220,7 @@ export const Screen6FunctionalFitness: React.FC<Screen6FunctionalFitnessProps> =
                 <span className="text-[10px] text-slate-500 block">Denyut Nadi Awal</span>
                 <input
                   type="number"
-                  min="40"
+                  min="0"
                   max="180"
                   value={denyutAwal}
                   onChange={(e) => {
@@ -236,7 +236,7 @@ export const Screen6FunctionalFitness: React.FC<Screen6FunctionalFitnessProps> =
                 <span className="text-[10px] text-slate-500 block">Denyut Nadi Akhir (1 m)</span>
                 <input
                   type="number"
-                  min="40"
+                  min="0"
                   max="200"
                   value={denyutAkhir}
                   onChange={(e) => {
