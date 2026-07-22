@@ -111,6 +111,12 @@ export interface EvaluationResult {
     pushUp?: string;
     verticalJump?: string;
     cooperRun?: string;
+    sitToStand?: string;
+    plank?: string;
+    balance?: string;
+    sitAndReachFF?: string;
+    stepTest?: string;
+    recoveryHR?: string;
   };
   tanggalTes: string;
 }

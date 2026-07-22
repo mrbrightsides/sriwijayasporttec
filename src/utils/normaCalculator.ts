@@ -612,6 +612,13 @@ export function evaluateSriwijayaSportTec(
   const rekomendasiVerticalJump = getRekomendasiVerticalJump(tkji.skorVerticalJump);
   const rekomendasiCooperRun = getRekomendasiCooperRun(tkji.skorCooper);
 
+  const rekomendasiSitToStand = getRekomendasiSitToStand(functional.skorSitToStand);
+  const rekomendasiPlank = getRekomendasiPlank(functional.skorPlank);
+  const rekomendasiBalance = getRekomendasiBalance(functional.skorBalance);
+  const rekomendasiSitAndReachFF = getRekomendasiSitAndReachFF(functional.skorSitAndReach);
+  const rekomendasiStepTest = getRekomendasiStepTest(functional.skorStepTest);
+  const rekomendasiRecoveryHR = getRekomendasiRecoveryHR(functional.skorDeltaHR);
+
   return {
     skorAktivitas,
     skorIMT,
@@ -629,6 +636,12 @@ export function evaluateSriwijayaSportTec(
       pushUp: rekomendasiPushUp,
       verticalJump: rekomendasiVerticalJump,
       cooperRun: rekomendasiCooperRun,
+      sitToStand: rekomendasiSitToStand,
+      plank: rekomendasiPlank,
+      balance: rekomendasiBalance,
+      sitAndReachFF: rekomendasiSitAndReachFF,
+      stepTest: rekomendasiStepTest,
+      recoveryHR: rekomendasiRecoveryHR,
     },
     tanggalTes: new Date().toLocaleDateString('id-ID', {
       day: 'numeric',
@@ -636,4 +649,130 @@ export function evaluateSriwijayaSportTec(
       year: 'numeric',
     }),
   };
+}
+
+export function getRekomendasiSitToStand(val: number | string): string {
+  const kat = typeof val === 'number'
+    ? (val >= 85 ? 'Sangat Baik' : val >= 70 ? 'Baik' : val >= 55 ? 'Cukup' : val >= 45 ? 'Kurang' : 'Sangat Kurang')
+    : val;
+  const str = String(kat).toLowerCase();
+
+  if (str.includes('sangat baik')) {
+    return 'Hasil menunjukkan bahwa kekuatan dan daya tahan otot tungkai berada pada kondisi optimal. Kondisi ini mendukung kemampuan melakukan aktivitas sehari-hari maupun aktivitas olahraga dengan efisien serta menurunkan risiko cedera. Untuk mempertahankan performa tersebut, disarankan tetap melakukan latihan kekuatan otot tungkai sebanyak 2–3 kali per minggu menggunakan latihan seperti squat, lunges, step-up, dan leg press dengan intensitas 70–80% 1RM, 3 set × 12–15 repetisi. Kombinasikan dengan latihan keseimbangan, fleksibilitas, dan aktivitas aerobik minimal 150–300 menit per minggu. Lakukan evaluasi kebugaran setiap 8–12 minggu untuk memantau perkembangan kemampuan fungsional.';
+  }
+  if (str.includes('baik')) {
+    return 'Hasil menunjukkan bahwa kekuatan dan daya tahan otot tungkai sudah berada pada kategori baik, namun masih terdapat peluang untuk ditingkatkan agar mencapai kondisi optimal. Disarankan melakukan latihan kekuatan 2–3 kali per minggu menggunakan squat, chair squat, step-up, atau lunges dengan intensitas 60–70% 1RM, 3 set × 10–12 repetisi. Tambahkan latihan keseimbangan seperti single-leg stand dan latihan aerobik intensitas sedang selama 150–300 menit per minggu. Tingkatkan beban latihan secara bertahap sekitar 5–10% setiap 2–3 minggu apabila latihan dapat diselesaikan tanpa keluhan.';
+  }
+  if (str.includes('cukup') || str.includes('sedang')) {
+    return 'Hasil menunjukkan bahwa kekuatan otot tungkai masih berada pada tingkat sedang sehingga kemampuan melakukan aktivitas yang membutuhkan kekuatan dan daya tahan dalam waktu lama dapat menurun. Untuk meningkatkan kemampuan tersebut, lakukan chair sit to stand, body weight squat, step-up, dan calf raise sebanyak 3 kali per minggu dengan intensitas 50–60% 1RM, 2–3 set × 10–12 repetisi. Tambahkan aktivitas aerobik seperti jalan cepat atau bersepeda selama 30–45 menit, 3–5 kali per minggu, serta latihan peregangan otot tungkai setelah berolahraga. Tingkatkan repetisi atau beban secara bertahap sesuai toleransi tubuh.';
+  }
+  if (str.includes('kurang') && !str.includes('sangat')) {
+    return 'Hasil menunjukkan bahwa kekuatan dan daya tahan otot tungkai berada di bawah rata-rata sehingga dapat memengaruhi kemampuan berdiri dari posisi duduk, menaiki tangga, berjalan dalam waktu lama, maupun melakukan aktivitas sehari-hari. Disarankan memulai program latihan secara bertahap melalui chair sit to stand, wall squat, step-up rendah, dan marching in place sebanyak 3 kali per minggu dengan intensitas 40–60% 1RM, 2 set × 8–10 repetisi. Kombinasikan dengan aktivitas aerobik ringan seperti jalan kaki selama 20–30 menit, 5 kali per minggu. Fokus utama adalah meningkatkan kualitas gerakan, bukan kecepatan. Tambahkan 1–2 repetisi setiap minggu apabila latihan dapat dilakukan dengan teknik yang benar dan tanpa rasa nyeri.';
+  }
+  return 'Hasil menunjukkan bahwa kekuatan otot tungkai masih sangat rendah dan berpotensi menyebabkan keterbatasan dalam melakukan aktivitas fungsional sehari-hari serta meningkatkan risiko jatuh dan cedera. Disarankan memulai latihan dengan intensitas ringan menggunakan assisted chair stand, seated knee extension, heel raise, dan latihan keseimbangan sederhana sebanyak 3 kali per minggu, 2 set × 8 repetisi, dengan intensitas sekitar 40–50% 1RM. Aktivitas aerobik berupa jalan santai selama 15–20 menit dapat dilakukan 5 kali per minggu sesuai kemampuan. Pastikan setiap sesi diawali dengan pemanasan 5–10 menit dan diakhiri pendinginan. Apabila terdapat nyeri sendi, riwayat penyakit kronis, atau kesulitan melakukan latihan secara mandiri, konsultasikan dengan fisioterapis atau tenaga kesehatan sebelum meningkatkan intensitas latihan.';
+}
+
+export function getRekomendasiPlank(val: number | string): string {
+  const kat = typeof val === 'number'
+    ? (val >= 85 ? 'Sangat Baik' : val >= 70 ? 'Baik' : val >= 55 ? 'Cukup' : val >= 45 ? 'Kurang' : 'Sangat Kurang')
+    : val;
+  const str = String(kat).toLowerCase();
+
+  if (str.includes('sangat baik')) {
+    return 'Hasil menunjukkan bahwa daya tahan otot inti (core stability) berada pada kategori sangat baik. Kondisi ini menunjukkan kemampuan otot perut, punggung bawah, dan panggul dalam mempertahankan stabilitas tubuh sudah optimal. Kemampuan tersebut berperan penting dalam menjaga postur tubuh, meningkatkan efisiensi gerakan, mengurangi risiko cedera, serta mendukung performa pada berbagai aktivitas olahraga. Untuk mempertahankan kondisi ini, lakukan latihan core stability 2–3 kali per minggu melalui front plank, side plank, bird dog, dead bug, dan mountain climber dengan intensitas sedang hingga tinggi, 3 set × 45–90 detik untuk latihan statis atau 3 set × 12–15 repetisi untuk latihan dinamis. Kombinasikan dengan latihan kekuatan seluruh tubuh dan aktivitas aerobik minimal 150–300 menit per minggu. Evaluasi kembali kemampuan core setiap 8–12 minggu.';
+  }
+  if (str.includes('baik')) {
+    return 'Hasil menunjukkan bahwa daya tahan otot inti berada pada kategori baik, namun masih dapat ditingkatkan agar stabilitas tubuh menjadi lebih optimal. Disarankan melakukan latihan core stability 2–3 kali per minggu menggunakan front plank, side plank, bird dog, dead bug, dan glute bridge dengan intensitas 60–70% kemampuan maksimal, 3 set × 30–60 detik atau 3 set × 10–12 repetisi. Tambahkan latihan keseimbangan dan fleksibilitas untuk meningkatkan koordinasi gerakan tubuh. Tingkatkan durasi plank sekitar 5–10 detik setiap 1–2 minggu apabila latihan dapat dilakukan dengan teknik yang benar.';
+  }
+  if (str.includes('cukup') || str.includes('sedang')) {
+    return 'Hasil menunjukkan bahwa daya tahan otot inti berada pada kategori cukup sehingga stabilitas batang tubuh belum optimal, terutama saat melakukan aktivitas yang membutuhkan keseimbangan, mengangkat beban, atau mempertahankan postur dalam waktu lama. Untuk meningkatkan kemampuan tersebut, lakukan modified plank, front plank, bird dog, dead bug, dan glute bridge sebanyak 3 kali per minggu dengan intensitas 50–60% kemampuan maksimal, 2–3 set × 20–30 detik atau 2–3 set × 10–12 repetisi. Kombinasikan dengan aktivitas aerobik intensitas sedang selama 30–45 menit, 3–5 kali per minggu. Fokus pada kualitas gerakan dan aktivasi otot inti dibandingkan lamanya mempertahankan posisi plank.';
+  }
+  if (str.includes('kurang') && !str.includes('sangat')) {
+    return 'Hasil menunjukkan bahwa daya tahan otot inti masih berada di bawah rata-rata. Kondisi ini dapat menyebabkan postur tubuh kurang stabil, meningkatkan risiko nyeri punggung bawah, serta menurunkan efisiensi gerakan saat beraktivitas maupun berolahraga. Disarankan memulai latihan secara bertahap melalui modified plank, bird dog, dead bug, pelvic bridge, dan abdominal bracing sebanyak 3 kali per minggu dengan intensitas ringan hingga sedang, 2–3 set × 15–20 detik atau 2 set × 8–10 repetisi. Tambahkan latihan peregangan otot punggung dan pinggul setelah latihan. Tingkatkan durasi latihan sekitar 5 detik setiap minggu apabila latihan dapat dilakukan dengan teknik yang benar tanpa muncul nyeri atau kompensasi gerakan.';
+  }
+  return 'Hasil menunjukkan bahwa daya tahan otot inti berada pada kategori sangat rendah sehingga kemampuan menjaga stabilitas batang tubuh masih terbatas. Kondisi ini dapat meningkatkan risiko gangguan postur, nyeri punggung bawah, serta kesulitan melakukan aktivitas fungsional sehari-hari. Disarankan memulai program latihan secara bertahap menggunakan abdominal bracing, modified plank dengan lutut sebagai tumpuan, bird dog sederhana, pelvic tilt, dan glute bridge sebanyak 3 kali per minggu, intensitas 40–50% kemampuan maksimal, 2 set × 10–15 detik atau 2 set × 8 repetisi. Lakukan pemanasan dan pendinginan selama 5–10 menit, kemudian tingkatkan durasi latihan secara bertahap sesuai toleransi tubuh. Apabila terdapat riwayat nyeri punggung kronis, cedera tulang belakang, atau keluhan muskuloskeletal lainnya, disarankan berkonsultasi dengan fisioterapis atau tenaga kesehatan sebelum meningkatkan intensitas latihan.';
+}
+
+export function getRekomendasiBalance(val: number | string): string {
+  const kat = typeof val === 'number'
+    ? (val >= 85 ? 'Sangat Baik' : val >= 70 ? 'Baik' : val >= 55 ? 'Cukup' : val >= 45 ? 'Kurang' : 'Sangat Kurang')
+    : val;
+  const str = String(kat).toLowerCase();
+
+  if (str.includes('sangat baik')) {
+    return 'Hasil menunjukkan bahwa kemampuan keseimbangan statis dan kontrol postural berada pada kategori sangat baik. Kondisi ini mencerminkan koordinasi sistem saraf, otot, dan proprioseptif yang bekerja secara optimal sehingga mampu menjaga stabilitas tubuh selama aktivitas sehari-hari maupun olahraga. Untuk mempertahankan kemampuan ini, lakukan latihan keseimbangan 2–3 kali per minggu melalui one-leg stand, single-leg squat, BOSU ball exercise, tandem walk, lateral hop, dan agility drill. Gunakan intensitas sedang hingga tinggi, dengan 3 set × 45–60 detik untuk latihan statis atau 3 set × 10–15 repetisi untuk latihan dinamis. Kombinasikan dengan latihan kekuatan tungkai, core stability, serta aktivitas aerobik minimal 150–300 menit per minggu. Evaluasi kemampuan keseimbangan setiap 8–12 minggu untuk memastikan performa tetap optimal.';
+  }
+  if (str.includes('baik')) {
+    return 'Hasil menunjukkan bahwa kemampuan keseimbangan berada pada kategori baik, namun masih dapat ditingkatkan agar stabilitas tubuh lebih optimal pada berbagai aktivitas fungsional maupun olahraga. Disarankan melakukan latihan keseimbangan 2–3 kali per minggu menggunakan one-leg stand, tandem walk, heel-to-toe walk, lateral stepping, dan single-leg reach dengan intensitas sedang, 3 set × 30–45 detik atau 3 set × 10–12 repetisi. Tambahkan latihan core stability dan penguatan otot tungkai untuk meningkatkan kontrol postur. Tingkatkan durasi latihan sekitar 5–10 detik setiap 1–2 minggu apabila latihan dapat dilakukan dengan teknik yang benar tanpa kehilangan keseimbangan.';
+  }
+  if (str.includes('cukup') || str.includes('sedang')) {
+    return 'Hasil menunjukkan bahwa kemampuan keseimbangan masih berada pada kategori cukup sehingga kontrol postural dan koordinasi tubuh belum optimal, terutama saat melakukan perubahan posisi, berjalan pada permukaan yang tidak rata, atau aktivitas olahraga. Untuk meningkatkan kemampuan tersebut, lakukan one-leg stand, tandem walk, heel-to-toe walk, seated-to-stand balance, dan single-leg reach sebanyak 3–4 kali per minggu dengan intensitas ringan hingga sedang, 2–3 set × 20–30 detik atau 2–3 set × 10 repetisi. Kombinasikan dengan latihan kekuatan tungkai, latihan inti (core stability), dan aktivitas aerobik intensitas sedang selama 30–45 menit, 3–5 kali per minggu. Fokus pada kualitas gerakan dan pertahankan posisi tubuh tetap stabil selama latihan.';
+  }
+  if (str.includes('kurang') && !str.includes('sangat')) {
+    return 'Hasil menunjukkan bahwa kemampuan keseimbangan berada di bawah rata-rata sehingga risiko kehilangan keseimbangan, cedera, atau kesulitan melakukan aktivitas fungsional menjadi lebih tinggi. Disarankan memulai program latihan secara bertahap melalui one-leg stand dengan pegangan, tandem walk, heel raise, marching in place, dan weight shifting exercise sebanyak 3–4 kali per minggu dengan intensitas ringan, 2–3 set × 15–20 detik atau 2 set × 8–10 repetisi. Tambahkan latihan penguatan otot tungkai dan core stability untuk meningkatkan stabilitas tubuh secara menyeluruh. Tingkatkan durasi latihan sekitar 5 detik setiap minggu apabila keseimbangan sudah membaik dan latihan dapat dilakukan dengan teknik yang benar.';
+  }
+  return 'Hasil menunjukkan bahwa kemampuan keseimbangan berada pada kategori sangat rendah sehingga meningkatkan risiko jatuh, cedera, dan keterbatasan dalam melakukan aktivitas sehari-hari. Disarankan memulai latihan dengan latihan keseimbangan dasar menggunakan pegangan atau kursi sebagai penyangga, seperti assisted one-leg stand, weight shifting, chair marching, heel raise, dan toe raise sebanyak 3–5 kali per minggu dengan intensitas ringan, 2 set × 10–15 detik atau 2 set × 8 repetisi. Lakukan pemanasan dan pendinginan selama 5–10 menit, kemudian tingkatkan durasi latihan secara bertahap sesuai kemampuan. Apabila peserta memiliki riwayat jatuh, gangguan vestibular, gangguan neurologis, atau penyakit muskuloskeletal, latihan sebaiknya dilakukan dengan pendampingan fisioterapis atau tenaga kesehatan yang kompeten.';
+}
+
+export function getRekomendasiSitAndReachFF(val: number | string): string {
+  const kat = typeof val === 'number'
+    ? (val >= 85 ? 'Sangat Baik' : val >= 70 ? 'Baik' : val >= 55 ? 'Cukup' : val >= 45 ? 'Kurang' : 'Sangat Kurang')
+    : val;
+  const str = String(kat).toLowerCase();
+
+  if (str.includes('sangat baik')) {
+    return 'Hasil menunjukkan bahwa fleksibilitas otot hamstring, punggung bawah, dan sendi panggul berada pada kategori sangat baik. Kondisi ini menunjukkan bahwa rentang gerak sendi (range of motion) sudah optimal sehingga mendukung efisiensi gerakan, memperbaiki postur tubuh, mengurangi risiko cedera otot maupun sendi, serta meningkatkan performa dalam aktivitas sehari-hari maupun olahraga. Untuk mempertahankan kondisi tersebut, lakukan latihan fleksibilitas 3–5 kali per minggu melalui hamstring stretch, hip flexor stretch, seated hamstring stretch, cobra stretch, cat-camel stretch, dan dynamic stretching sebelum aktivitas fisik. Setiap gerakan dilakukan 3 set × 30–60 detik dengan intensitas ringan hingga sedang (hingga terasa regangan tanpa nyeri). Kombinasikan dengan latihan kekuatan, keseimbangan, dan aktivitas aerobik minimal 150–300 menit per minggu. Evaluasi fleksibilitas setiap 8–12 minggu untuk memantau perkembangan.';
+  }
+  if (str.includes('baik')) {
+    return 'Hasil menunjukkan bahwa fleksibilitas tubuh berada pada kategori baik, namun masih dapat ditingkatkan agar mobilitas sendi menjadi lebih optimal dan membantu meningkatkan efisiensi gerakan tubuh. Disarankan melakukan latihan fleksibilitas 3–4 kali per minggu menggunakan hamstring stretch, butterfly stretch, hip flexor stretch, seated trunk rotation, dan cat-camel stretch dengan intensitas ringan, 3 set × 30–45 detik untuk setiap kelompok otot. Tambahkan pemanasan dinamis sebelum latihan dan pendinginan berupa peregangan statis setelah aktivitas fisik. Tingkatkan durasi peregangan sekitar 5–10 detik setiap 2 minggu apabila gerakan dapat dilakukan tanpa rasa nyeri.';
+  }
+  if (str.includes('cukup') || str.includes('sedang')) {
+    return 'Hasil menunjukkan bahwa fleksibilitas tubuh berada pada kategori cukup sehingga rentang gerak beberapa sendi masih terbatas. Kondisi ini dapat memengaruhi kualitas gerakan, meningkatkan kekakuan otot, serta memperbesar risiko cedera apabila melakukan aktivitas fisik dengan intensitas tinggi. Untuk meningkatkan fleksibilitas, lakukan hamstring stretch, standing calf stretch, hip flexor stretch, seated forward reach, dan cobra stretch sebanyak 4–5 kali per minggu, dengan intensitas ringan hingga sedang, 2–3 set × 20–30 detik pada setiap gerakan. Kombinasikan dengan latihan mobilitas sendi dan aktivitas aerobik ringan selama 30–45 menit, 3–5 kali per minggu. Fokus pada gerakan yang perlahan, terkontrol, dan tanpa memaksakan rentang gerak.';
+  }
+  if (str.includes('kurang') && !str.includes('sangat')) {
+    return 'Hasil menunjukkan bahwa fleksibilitas otot dan mobilitas sendi berada di bawah rata-rata sehingga dapat menyebabkan kekakuan otot, keterbatasan gerak, penurunan efisiensi aktivitas sehari-hari, serta meningkatkan risiko cedera pada saat berolahraga. Disarankan memulai latihan secara bertahap melalui hamstring stretch, seated hamstring stretch, hip flexor stretch, cat-camel stretch, pelvic tilt, dan lower back stretch sebanyak 5 kali per minggu dengan intensitas ringan, 2–3 set × 15–30 detik untuk setiap gerakan. Tambahkan latihan mobilitas sendi sebelum peregangan serta lakukan pendinginan setelah latihan. Tingkatkan durasi peregangan sekitar 5 detik setiap minggu apabila latihan dapat dilakukan tanpa rasa nyeri atau ketidaknyamanan.';
+  }
+  return 'Hasil menunjukkan bahwa fleksibilitas tubuh berada pada kategori sangat rendah sehingga rentang gerak sendi menjadi terbatas dan dapat mengganggu aktivitas fungsional sehari-hari, seperti membungkuk, mengambil benda di lantai, maupun melakukan gerakan olahraga. Kondisi ini juga meningkatkan risiko ketegangan otot dan cedera muskuloskeletal. Disarankan memulai program latihan menggunakan stretching dasar, seperti hamstring stretch dengan bantuan tali, seated forward reach, pelvic tilt, cat-camel stretch, child pose, dan lower back stretch sebanyak 5–7 kali per minggu dengan intensitas ringan, 2 set × 15–20 detik untuk setiap gerakan. Seluruh latihan dilakukan secara perlahan tanpa gerakan memantul (bouncing) dan dihentikan apabila muncul rasa nyeri. Lakukan pemanasan selama 5–10 menit sebelum peregangan, kemudian tingkatkan durasi latihan secara bertahap sesuai toleransi tubuh. Apabila terdapat riwayat nyeri punggung kronis, cedera otot, atau gangguan sendi, disarankan berkonsultasi dengan fisioterapis atau tenaga kesehatan sebelum meningkatkan intensitas latihan.';
+}
+
+export function getRekomendasiStepTest(val: number | string): string {
+  const kat = typeof val === 'number'
+    ? (val >= 85 ? 'Sangat Baik' : val >= 70 ? 'Baik' : val >= 55 ? 'Cukup' : val >= 45 ? 'Kurang' : 'Sangat Kurang')
+    : val;
+  const str = String(kat).toLowerCase();
+
+  if (str.includes('sangat baik')) {
+    return 'Hasil menunjukkan bahwa kapasitas kardiorespirasi dan kemampuan pemulihan denyut jantung setelah aktivitas fisik berada pada kategori sangat baik. Kondisi ini menunjukkan bahwa jantung, paru-paru, dan sistem sirkulasi darah mampu memasok oksigen secara efisien sehingga tubuh dapat melakukan aktivitas fisik dengan intensitas tinggi tanpa mengalami kelelahan yang berlebihan. Untuk mempertahankan kondisi ini, lakukan latihan aerobik 3–5 kali per minggu dengan intensitas 70–85% HRmax selama 30–60 menit per sesi melalui jogging, berlari, bersepeda, berenang, rowing, atau circuit training. Tambahkan latihan interval intensitas tinggi (HIIT) 1–2 kali per minggu (misalnya 4–6 interval × 2–4 menit pada 80–90% HRmax dengan pemulihan aktif 2–3 menit). Kombinasikan dengan latihan kekuatan minimal 2 kali per minggu, lakukan pemanasan dan pendinginan selama 5–10 menit, serta evaluasi kebugaran setiap 8–12 minggu.';
+  }
+  if (str.includes('baik')) {
+    return 'Hasil menunjukkan bahwa daya tahan kardiorespirasi berada pada kategori baik, namun masih memiliki potensi untuk ditingkatkan sehingga kemampuan jantung dan paru menjadi lebih efisien saat melakukan aktivitas fisik berkepanjangan. Disarankan melakukan latihan aerobik 4–5 kali per minggu dengan intensitas 60–75% HRmax selama 30–60 menit menggunakan jalan cepat, jogging, bersepeda, berenang, atau elliptical trainer. Tambahkan latihan interval ringan hingga sedang sebanyak 1 kali per minggu dengan pola 5 interval × 2 menit pada intensitas 75–80% HRmax diselingi pemulihan aktif. Lakukan latihan kekuatan 2 kali per minggu dan tingkatkan durasi latihan sekitar 5–10 menit setiap 2–3 minggu sesuai toleransi tubuh.';
+  }
+  if (str.includes('cukup') || str.includes('sedang')) {
+    return 'Hasil menunjukkan bahwa kapasitas kardiorespirasi berada pada kategori cukup sehingga kemampuan tubuh dalam menggunakan oksigen selama aktivitas fisik masih belum optimal. Kondisi ini dapat menyebabkan kelelahan lebih cepat ketika melakukan aktivitas dengan intensitas sedang hingga tinggi. Untuk meningkatkan kapasitas aerobik, lakukan aktivitas aerobik 4–5 kali per minggu selama 30–45 menit dengan intensitas 55–70% HRmax melalui jalan cepat, jogging ringan, bersepeda, senam aerobik, atau berenang. Tambahkan latihan interval sedang sebanyak 4–6 interval × 1–2 menit pada intensitas 70–75% HRmax, diselingi jalan kaki selama 2 menit. Kombinasikan dengan latihan kekuatan seluruh tubuh 2 kali per minggu dan tingkatkan volume latihan secara bertahap sesuai perkembangan kemampuan.';
+  }
+  if (str.includes('kurang') && !str.includes('sangat')) {
+    return 'Hasil menunjukkan bahwa daya tahan kardiorespirasi berada di bawah rata-rata sehingga kemampuan jantung dan paru dalam memasok oksigen saat beraktivitas masih terbatas. Kondisi ini dapat menyebabkan tubuh lebih cepat lelah, denyut jantung meningkat lebih cepat, dan waktu pemulihan menjadi lebih lama setelah melakukan aktivitas fisik. Disarankan memulai program latihan secara bertahap melalui jalan cepat, bersepeda statis, berenang ringan, atau senam low impact sebanyak 5 kali per minggu dengan durasi 20–30 menit per sesi pada intensitas 50–65% HRmax. Setelah tubuh beradaptasi, tambahkan interval ringan berupa 3–5 kali jogging selama 1 menit yang diselingi jalan kaki selama 2 menit. Tingkatkan durasi latihan sekitar 5 menit setiap minggu hingga mencapai target 150–300 menit aktivitas aerobik per minggu. Lakukan pemanasan dan pendinginan masing-masing selama 5–10 menit untuk membantu proses adaptasi tubuh.';
+  }
+  return 'Hasil menunjukkan bahwa kapasitas kardiorespirasi berada pada kategori sangat rendah sehingga kemampuan jantung, paru-paru, dan sistem sirkulasi dalam mendukung aktivitas fisik masih sangat terbatas. Kondisi ini meningkatkan risiko kelelahan, sesak napas saat beraktivitas ringan, serta dapat berkaitan dengan rendahnya tingkat kebugaran secara keseluruhan. Disarankan memulai latihan menggunakan aktivitas aerobik berdampak rendah (low impact) seperti jalan santai, sepeda statis tanpa beban, latihan air (aquatic exercise), atau latihan kursi (chair exercise) sebanyak 5–7 kali per minggu, durasi 15–20 menit per sesi dengan intensitas 40–55% HRmax. Setelah mampu beradaptasi, durasi latihan dapat ditingkatkan secara bertahap 5 menit setiap minggu hingga mencapai 30–45 menit per sesi. Tambahkan latihan kekuatan ringan 2 kali per minggu untuk meningkatkan kapasitas fungsional. Seluruh latihan harus diawali dengan pemanasan dan diakhiri pendinginan selama 5–10 menit. Apabila peserta memiliki riwayat penyakit jantung, hipertensi tidak terkontrol, diabetes, penyakit paru kronis, atau muncul keluhan seperti nyeri dada, pusing, atau sesak napas berat selama latihan, segera hentikan aktivitas dan konsultasikan dengan dokter atau tenaga kesehatan sebelum melanjutkan program latihan.';
+}
+
+export function getRekomendasiRecoveryHR(val: number | string): string {
+  const kat = typeof val === 'number'
+    ? (val >= 85 ? 'Sangat Baik' : val >= 70 ? 'Baik' : val >= 55 ? 'Cukup' : val >= 45 ? 'Kurang' : 'Sangat Kurang')
+    : val;
+  const str = String(kat).toLowerCase();
+
+  if (str.includes('sangat baik')) {
+    return 'Hasil menunjukkan bahwa kemampuan pemulihan denyut jantung setelah aktivitas fisik berada pada kategori sangat baik. Kondisi ini mencerminkan fungsi jantung, sistem saraf otonom, dan kapasitas kardiorespirasi yang sangat efisien sehingga denyut jantung dapat kembali mendekati kondisi istirahat dalam waktu singkat setelah berolahraga. Hal ini juga menunjukkan kemampuan tubuh dalam beradaptasi terhadap beban latihan sudah sangat baik dan berkaitan dengan risiko penyakit kardiovaskular yang lebih rendah. Untuk mempertahankan kondisi tersebut, lakukan latihan aerobik 3–5 kali per minggu dengan intensitas 70–85% HRmax selama 30–60 menit melalui lari, bersepeda, berenang, rowing, atau circuit training. Tambahkan latihan interval intensitas tinggi (HIIT) sebanyak 1–2 kali per minggu, misalnya 4–6 interval × 2–4 menit pada 80–90% HRmax dengan pemulihan aktif. Kombinasikan dengan latihan kekuatan 2–3 kali per minggu, lakukan pemanasan dan pendinginan selama 5–10 menit, serta evaluasi Recovery Heart Rate setiap 8–12 minggu untuk memastikan kemampuan pemulihan tetap optimal.';
+  }
+  if (str.includes('baik')) {
+    return 'Hasil menunjukkan bahwa pemulihan denyut jantung berada pada kategori baik. Jantung mampu beradaptasi dengan baik terhadap aktivitas fisik, namun efisiensi pemulihan masih dapat ditingkatkan agar respons sistem kardiovaskular menjadi lebih optimal. Disarankan melakukan latihan aerobik 4–5 kali per minggu dengan intensitas 60–75% HRmax selama 30–60 menit melalui jalan cepat, jogging, bersepeda, berenang, atau elliptical trainer. Tambahkan latihan interval sedang sebanyak 1 kali per minggu menggunakan pola 5 interval × 2 menit pada intensitas 75–80% HRmax dengan pemulihan aktif. Pastikan melakukan pendinginan secara bertahap selama 5–10 menit setelah latihan untuk membantu mempercepat penurunan denyut jantung. Tingkatkan volume latihan secara bertahap sekitar 5–10% setiap 2–3 minggu sesuai kemampuan tubuh.';
+  }
+  if (str.includes('cukup') || str.includes('sedang')) {
+    return 'Hasil menunjukkan bahwa kemampuan pemulihan denyut jantung masih berada pada kategori cukup. Kondisi ini mengindikasikan bahwa sistem kardiovaskular membutuhkan waktu yang lebih lama untuk kembali ke kondisi normal setelah aktivitas fisik. Untuk meningkatkan efisiensi pemulihan, lakukan aktivitas aerobik 4–5 kali per minggu selama 30–45 menit pada intensitas 55–70% HRmax, seperti jalan cepat, jogging ringan, bersepeda, berenang, atau senam aerobik. Tambahkan latihan interval ringan sebanyak 4–6 interval × 1–2 menit pada intensitas 70–75% HRmax yang diselingi jalan kaki selama 2 menit. Perhatikan kecukupan hidrasi, kualitas tidur, serta waktu pemulihan antar sesi latihan karena faktor-faktor tersebut sangat memengaruhi kecepatan pemulihan denyut jantung. Evaluasi kembali hasil tes setiap 8–12 minggu untuk melihat peningkatan adaptasi kardiovaskular.';
+  }
+  if (str.includes('kurang') && !str.includes('sangat')) {
+    return 'Hasil menunjukkan bahwa kemampuan pemulihan denyut jantung berada di bawah rata-rata sehingga denyut jantung masih membutuhkan waktu yang relatif lama untuk kembali ke kondisi normal setelah aktivitas fisik. Kondisi ini dapat menunjukkan bahwa kapasitas aerobik dan efisiensi kerja jantung masih perlu ditingkatkan. Disarankan memulai program latihan secara bertahap melalui jalan cepat, bersepeda statis, berenang ringan, atau senam low impact sebanyak 5 kali per minggu dengan durasi 20–30 menit pada intensitas 50–65% HRmax. Setelah kemampuan meningkat, tambahkan interval ringan berupa jogging selama 1 menit yang diselingi jalan kaki selama 2 menit sebanyak 3–5 pengulangan. Fokuskan latihan pada peningkatan durasi sebelum meningkatkan intensitas. Selain latihan, pastikan menjaga pola makan bergizi seimbang, mencukupi kebutuhan cairan, mengelola stres, dan memperoleh waktu tidur 7–9 jam per malam karena seluruh faktor tersebut berpengaruh terhadap pemulihan sistem kardiovaskular.';
+  }
+  return 'Hasil menunjukkan bahwa kemampuan pemulihan denyut jantung berada pada kategori sangat rendah sehingga sistem kardiovaskular memerlukan waktu yang cukup lama untuk kembali ke kondisi normal setelah aktivitas fisik. Kondisi ini dapat mengindikasikan rendahnya kapasitas aerobik dan perlunya peningkatan kebugaran secara bertahap. Disarankan memulai latihan menggunakan aktivitas aerobik berdampak rendah (low impact) seperti jalan santai, sepeda statis tanpa beban, latihan air (aquatic exercise), atau chair exercise sebanyak 5–7 kali per minggu, durasi 15–20 menit per sesi pada intensitas 40–55% HRmax. Setelah tubuh mulai beradaptasi, tingkatkan durasi latihan sekitar 5 menit setiap minggu hingga mencapai 30–45 menit per sesi. Tambahkan latihan kekuatan ringan 2 kali per minggu untuk meningkatkan kapasitas fungsional tubuh secara menyeluruh. Seluruh latihan harus diawali dengan pemanasan dan diakhiri pendinginan selama 5–10 menit. Apabila pengguna memiliki riwayat penyakit jantung, hipertensi tidak terkontrol, diabetes, penyakit paru kronis, atau mengalami keluhan seperti nyeri dada, sesak napas berat, pusing, atau denyut jantung tidak teratur selama latihan, segera hentikan aktivitas dan lakukan konsultasi dengan dokter atau tenaga kesehatan sebelum melanjutkan program latihan.';
 }

@@ -11,6 +11,12 @@ import {
   getRekomendasiPushUp,
   getRekomendasiVerticalJump,
   getRekomendasiCooperRun,
+  getRekomendasiSitToStand,
+  getRekomendasiPlank,
+  getRekomendasiBalance,
+  getRekomendasiSitAndReachFF,
+  getRekomendasiStepTest,
+  getRekomendasiRecoveryHR,
 } from '../../utils/normaCalculator';
 
 interface Screen10CetakLaporanProps {
@@ -31,6 +37,13 @@ export const Screen10CetakLaporan: React.FC<Screen10CetakLaporanProps> = ({
   const recPushUp = evaluation.rekomendasi.pushUp || getRekomendasiPushUp(tkji.skorPushUp);
   const recVerticalJump = evaluation.rekomendasi.verticalJump || getRekomendasiVerticalJump(tkji.skorVerticalJump);
   const recCooperRun = evaluation.rekomendasi.cooperRun || getRekomendasiCooperRun(tkji.skorCooper);
+
+  const recSitToStand = evaluation.rekomendasi.sitToStand || getRekomendasiSitToStand(functional.skorSitToStand);
+  const recPlank = evaluation.rekomendasi.plank || getRekomendasiPlank(functional.skorPlank);
+  const recBalance = evaluation.rekomendasi.balance || getRekomendasiBalance(functional.skorBalance);
+  const recSitAndReachFF = evaluation.rekomendasi.sitAndReachFF || getRekomendasiSitAndReachFF(functional.skorSitAndReach);
+  const recStepTest = evaluation.rekomendasi.stepTest || getRekomendasiStepTest(functional.skorStepTest);
+  const recRecoveryHR = evaluation.rekomendasi.recoveryHR || getRekomendasiRecoveryHR(functional.skorDeltaHR);
 
   const handleExportPDF = () => {
     const doc = new jsPDF();
@@ -98,6 +111,12 @@ export const Screen10CetakLaporan: React.FC<Screen10CetakLaporanProps> = ({
         ['Push-Up 60 Detik (Daya Tahan Otot)', recPushUp],
         ['Vertical Jump (Power Tungkai)', recVerticalJump],
         ['Lari 12 Menit (Cooper Test)', recCooperRun],
+        ['Sit to Stand 30 Detik (Kekuatan Tungkai)', recSitToStand],
+        ['Plank (Core Stability)', recPlank],
+        ['Balance 1 Kaki (Keseimbangan)', recBalance],
+        ['Sit and Reach (Fleksibilitas)', recSitAndReachFF],
+        ['Step Test Recovery (Kardiorespirasi)', recStepTest],
+        ['Recovery HR (Pemulihan Denyut Jantung)', recRecoveryHR],
         ['Daya Tahan Kardiorespirasi Umum', evaluation.rekomendasi.dayaTahan],
         ['Kekuatan & Daya Tahan Otot Umum', evaluation.rekomendasi.kekuatan],
         ['Fleksibilitas Sendi', evaluation.rekomendasi.fleksibilitas],
@@ -128,6 +147,18 @@ export const Screen10CetakLaporan: React.FC<Screen10CetakLaporanProps> = ({
       { 'Parameter': 'Rekomendasi Vertical Jump', 'Nilai': recVerticalJump },
       { 'Parameter': 'Lari 12 Menit Jarak (m)', 'Nilai': tkji.cooperDistanceMeter },
       { 'Parameter': 'Rekomendasi Lari 12 Menit', 'Nilai': recCooperRun },
+      { 'Parameter': 'Sit to Stand Repetisi', 'Nilai': functional.sitToStandReps },
+      { 'Parameter': 'Rekomendasi Sit to Stand', 'Nilai': recSitToStand },
+      { 'Parameter': 'Plank (detik)', 'Nilai': functional.plankSeconds },
+      { 'Parameter': 'Rekomendasi Plank', 'Nilai': recPlank },
+      { 'Parameter': 'Balance 1 Kaki (detik)', 'Nilai': functional.balanceSeconds },
+      { 'Parameter': 'Rekomendasi Balance', 'Nilai': recBalance },
+      { 'Parameter': 'Sit and Reach (cm)', 'Nilai': functional.sitAndReachCm },
+      { 'Parameter': 'Rekomendasi Sit and Reach', 'Nilai': recSitAndReachFF },
+      { 'Parameter': 'Step Test Recovery HR (bpm)', 'Nilai': functional.stepTestRecoveryPulse },
+      { 'Parameter': 'Rekomendasi Step Test', 'Nilai': recStepTest },
+      { 'Parameter': 'Recovery HR Penurunan (bpm)', 'Nilai': functional.recoveryHrDelta },
+      { 'Parameter': 'Rekomendasi Recovery HR', 'Nilai': recRecoveryHR },
       { 'Parameter': 'Skor TKJI', 'Nilai': tkji.totalSkorTKJI },
       { 'Parameter': 'Skor Functional Fitness', 'Nilai': functional.totalSkorFunctional },
       { 'Parameter': 'TOTAL SKOR KEBUGARAN', 'Nilai': evaluation.totalSkor },
@@ -285,6 +316,30 @@ export const Screen10CetakLaporan: React.FC<Screen10CetakLaporanProps> = ({
               <div className="pt-2 border-t border-slate-200">
                 <strong className="text-rose-900 block font-bold">5. Lari 12 Menit / Kapasitas Kardiorespirasi (Hasil: {tkji.cooperDistanceMeter} m):</strong>
                 <p className="text-slate-700 leading-relaxed mt-0.5">{recCooperRun}</p>
+              </div>
+              <div className="pt-2 border-t border-slate-200">
+                <strong className="text-cyan-900 block font-bold">6. Sit to Stand 30 Detik / Kekuatan Tungkai (Hasil: {functional.sitToStandReps} reps):</strong>
+                <p className="text-slate-700 leading-relaxed mt-0.5">{recSitToStand}</p>
+              </div>
+              <div className="pt-2 border-t border-slate-200">
+                <strong className="text-teal-900 block font-bold">7. Plank / Core Stability (Hasil: {functional.plankSeconds} detik):</strong>
+                <p className="text-slate-700 leading-relaxed mt-0.5">{recPlank}</p>
+              </div>
+              <div className="pt-2 border-t border-slate-200">
+                <strong className="text-sky-900 block font-bold">8. Balance 1 Kaki / Keseimbangan Statis (Hasil: {functional.balanceSeconds} detik):</strong>
+                <p className="text-slate-700 leading-relaxed mt-0.5">{recBalance}</p>
+              </div>
+              <div className="pt-2 border-t border-slate-200">
+                <strong className="text-purple-900 block font-bold">9. Sit and Reach / Fleksibilitas (Hasil: {functional.sitAndReachCm} cm):</strong>
+                <p className="text-slate-700 leading-relaxed mt-0.5">{recSitAndReachFF}</p>
+              </div>
+              <div className="pt-2 border-t border-slate-200">
+                <strong className="text-orange-900 block font-bold">10. Step Test Recovery / Kardiorespirasi (Hasil: {functional.stepTestRecoveryPulse} bpm):</strong>
+                <p className="text-slate-700 leading-relaxed mt-0.5">{recStepTest}</p>
+              </div>
+              <div className="pt-2 border-t border-slate-200">
+                <strong className="text-emerald-900 block font-bold">11. Recovery Heart Rate / Pemulihan HR 1 Menit (Hasil: {functional.recoveryHrDelta} bpm):</strong>
+                <p className="text-slate-700 leading-relaxed mt-0.5">{recRecoveryHR}</p>
               </div>
             </div>
           </div>

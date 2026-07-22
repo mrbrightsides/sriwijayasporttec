@@ -1,12 +1,18 @@
 import React, { useState } from 'react';
 import { AssessmentRecord } from '../../types';
-import { ArrowLeft, ArrowRight, Activity, Dumbbell, Sparkles, Footprints, Info, Scale, HeartPulse, ChevronDown, ChevronUp, Zap, Flame } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Activity, Dumbbell, Sparkles, Footprints, Info, Scale, HeartPulse, ChevronDown, ChevronUp, Zap, Flame, ShieldCheck, Compass, Move, Timer } from 'lucide-react';
 import {
   getRekomendasiAktivitasFisik,
   getRekomendasiIMT,
   getRekomendasiPushUp,
   getRekomendasiVerticalJump,
   getRekomendasiCooperRun,
+  getRekomendasiSitToStand,
+  getRekomendasiPlank,
+  getRekomendasiBalance,
+  getRekomendasiSitAndReachFF,
+  getRekomendasiStepTest,
+  getRekomendasiRecoveryHR,
 } from '../../utils/normaCalculator';
 
 interface Screen9RekomendasiAktivitasProps {
@@ -20,7 +26,7 @@ export const Screen9RekomendasiAktivitas: React.FC<Screen9RekomendasiAktivitasPr
   onPrev,
   onNext,
 }) => {
-  const { evaluation, peserta, aktivitas, imt, tkji } = record;
+  const { evaluation, peserta, aktivitas, imt, tkji, functional } = record;
   const { rekomendasi } = evaluation;
   const [showTableNorma, setShowTableNorma] = useState(false);
 
@@ -29,6 +35,13 @@ export const Screen9RekomendasiAktivitas: React.FC<Screen9RekomendasiAktivitasPr
   const rekomendasiPushUpText = rekomendasi.pushUp || getRekomendasiPushUp(tkji.skorPushUp);
   const rekomendasiVerticalJumpText = rekomendasi.verticalJump || getRekomendasiVerticalJump(tkji.skorVerticalJump);
   const rekomendasiCooperRunText = rekomendasi.cooperRun || getRekomendasiCooperRun(tkji.skorCooper);
+
+  const rekomendasiSitToStandText = rekomendasi.sitToStand || getRekomendasiSitToStand(functional?.skorSitToStand ?? 'Cukup');
+  const rekomendasiPlankText = rekomendasi.plank || getRekomendasiPlank(functional?.skorPlank ?? 'Cukup');
+  const rekomendasiBalanceText = rekomendasi.balance || getRekomendasiBalance(functional?.skorBalance ?? 'Cukup');
+  const rekomendasiSitAndReachFFText = rekomendasi.sitAndReachFF || getRekomendasiSitAndReachFF(functional?.skorSitAndReach ?? 'Cukup');
+  const rekomendasiStepTestText = rekomendasi.stepTest || getRekomendasiStepTest(functional?.skorStepTest ?? 'Cukup');
+  const rekomendasiRecoveryHRText = rekomendasi.recoveryHR || getRekomendasiRecoveryHR(functional?.skorDeltaHR ?? 'Cukup');
 
   return (
     <div className="max-w-4xl mx-auto bg-white border border-slate-200 rounded-2xl shadow-xl overflow-hidden">
@@ -183,6 +196,132 @@ export const Screen9RekomendasiAktivitas: React.FC<Screen9RekomendasiAktivitasPr
             </div>
             <p className="text-xs text-slate-800 leading-relaxed bg-white p-3 rounded-xl border border-rose-100 font-medium">
               {rekomendasiCooperRunText}
+            </p>
+          </div>
+
+          {/* 6. Sit to Stand 30 Detik (Functional Fitness - Kekuatan Otot Tungkai) */}
+          <div className="p-4 bg-gradient-to-br from-cyan-50/70 to-slate-50 rounded-2xl border border-cyan-200 space-y-2.5 shadow-sm">
+            <div className="flex items-center justify-between flex-wrap gap-2">
+              <div className="flex items-center space-x-2.5">
+                <div className="p-2 bg-cyan-700 text-white rounded-xl">
+                  <Move className="w-4 h-4" />
+                </div>
+                <div>
+                  <h4 className="text-xs font-bold text-slate-900">6. Sit to Stand 30 Detik (Kekuatan &amp; Daya Tahan Otot Tungkai)</h4>
+                  <span className="text-[11px] text-slate-500 font-medium">Evaluasi Otot Tungkai &amp; Kemampuan Berdiri Fungsional</span>
+                </div>
+              </div>
+              <span className="text-xs font-bold px-3 py-1 rounded-full bg-cyan-100 text-cyan-900 border border-cyan-300">
+                Hasil: {functional?.sitToStandReps ?? '-'} reps (Skor: {functional?.skorSitToStand ?? 'Cukup'})
+              </span>
+            </div>
+            <p className="text-xs text-slate-800 leading-relaxed bg-white p-3 rounded-xl border border-cyan-100 font-medium">
+              {rekomendasiSitToStandText}
+            </p>
+          </div>
+
+          {/* 7. Plank (Functional Fitness - Core Stability) */}
+          <div className="p-4 bg-gradient-to-br from-teal-50/70 to-slate-50 rounded-2xl border border-teal-200 space-y-2.5 shadow-sm">
+            <div className="flex items-center justify-between flex-wrap gap-2">
+              <div className="flex items-center space-x-2.5">
+                <div className="p-2 bg-teal-700 text-white rounded-xl">
+                  <ShieldCheck className="w-4 h-4" />
+                </div>
+                <div>
+                  <h4 className="text-xs font-bold text-slate-900">7. Plank (Daya Tahan Otot Inti / Core Stability)</h4>
+                  <span className="text-[11px] text-slate-500 font-medium">Evaluasi Otot Perut, Punggung Bawah &amp; Panggul</span>
+                </div>
+              </div>
+              <span className="text-xs font-bold px-3 py-1 rounded-full bg-teal-100 text-teal-900 border border-teal-300">
+                Hasil: {functional?.plankSeconds ?? '-'} detik (Skor: {functional?.skorPlank ?? 'Cukup'})
+              </span>
+            </div>
+            <p className="text-xs text-slate-800 leading-relaxed bg-white p-3 rounded-xl border border-teal-100 font-medium">
+              {rekomendasiPlankText}
+            </p>
+          </div>
+
+          {/* 8. Balance 1 Kaki (Functional Fitness - Keseimbangan) */}
+          <div className="p-4 bg-gradient-to-br from-sky-50/70 to-slate-50 rounded-2xl border border-sky-200 space-y-2.5 shadow-sm">
+            <div className="flex items-center justify-between flex-wrap gap-2">
+              <div className="flex items-center space-x-2.5">
+                <div className="p-2 bg-sky-700 text-white rounded-xl">
+                  <Compass className="w-4 h-4" />
+                </div>
+                <div>
+                  <h4 className="text-xs font-bold text-slate-900">8. Balance 1 Kaki (Keseimbangan Statis &amp; Postur)</h4>
+                  <span className="text-[11px] text-slate-500 font-medium">Evaluasi Koordinasi Sistem Saraf &amp; Proprioseptif</span>
+                </div>
+              </div>
+              <span className="text-xs font-bold px-3 py-1 rounded-full bg-sky-100 text-sky-900 border border-sky-300">
+                Hasil: {functional?.balanceSeconds ?? '-'} detik (Skor: {functional?.skorBalance ?? 'Cukup'})
+              </span>
+            </div>
+            <p className="text-xs text-slate-800 leading-relaxed bg-white p-3 rounded-xl border border-sky-100 font-medium">
+              {rekomendasiBalanceText}
+            </p>
+          </div>
+
+          {/* 9. Sit and Reach (Functional Fitness - Fleksibilitas) */}
+          <div className="p-4 bg-gradient-to-br from-purple-50/70 to-slate-50 rounded-2xl border border-purple-200 space-y-2.5 shadow-sm">
+            <div className="flex items-center justify-between flex-wrap gap-2">
+              <div className="flex items-center space-x-2.5">
+                <div className="p-2 bg-purple-700 text-white rounded-xl">
+                  <Sparkles className="w-4 h-4" />
+                </div>
+                <div>
+                  <h4 className="text-xs font-bold text-slate-900">9. Sit and Reach (Fleksibilitas Hamstring &amp; Punggung)</h4>
+                  <span className="text-[11px] text-slate-500 font-medium">Evaluasi Kelenturan Sendi &amp; Rentang Gerak Body</span>
+                </div>
+              </div>
+              <span className="text-xs font-bold px-3 py-1 rounded-full bg-purple-100 text-purple-900 border border-purple-300">
+                Hasil: {functional?.sitAndReachCm ?? '-'} cm (Skor: {functional?.skorSitAndReach ?? 'Cukup'})
+              </span>
+            </div>
+            <p className="text-xs text-slate-800 leading-relaxed bg-white p-3 rounded-xl border border-purple-100 font-medium">
+              {rekomendasiSitAndReachFFText}
+            </p>
+          </div>
+
+          {/* 10. Step Test Recovery (Functional Fitness - Ketahanan Kardiorespirasi) */}
+          <div className="p-4 bg-gradient-to-br from-orange-50/70 to-slate-50 rounded-2xl border border-orange-200 space-y-2.5 shadow-sm">
+            <div className="flex items-center justify-between flex-wrap gap-2">
+              <div className="flex items-center space-x-2.5">
+                <div className="p-2 bg-orange-700 text-white rounded-xl">
+                  <Timer className="w-4 h-4" />
+                </div>
+                <div>
+                  <h4 className="text-xs font-bold text-slate-900">10. Step Test Recovery (Kapasitas Kardiorespirasi)</h4>
+                  <span className="text-[11px] text-slate-500 font-medium">Evaluasi Respons Jantung terhadap Beban Naik Turun Bangku</span>
+                </div>
+              </div>
+              <span className="text-xs font-bold px-3 py-1 rounded-full bg-orange-100 text-orange-900 border border-orange-300">
+                Recovery HR: {functional?.stepTestRecoveryBpm ?? '-'} bpm (Skor: {functional?.skorStepTest ?? 'Cukup'})
+              </span>
+            </div>
+            <p className="text-xs text-slate-800 leading-relaxed bg-white p-3 rounded-xl border border-orange-100 font-medium">
+              {rekomendasiStepTestText}
+            </p>
+          </div>
+
+          {/* 11. Recovery Heart Rate (Functional Fitness - Pemulihan Denyut Jantung) */}
+          <div className="p-4 bg-gradient-to-br from-emerald-50/70 to-slate-50 rounded-2xl border border-emerald-200 space-y-2.5 shadow-sm">
+            <div className="flex items-center justify-between flex-wrap gap-2">
+              <div className="flex items-center space-x-2.5">
+                <div className="p-2 bg-emerald-700 text-white rounded-xl">
+                  <HeartPulse className="w-4 h-4" />
+                </div>
+                <div>
+                  <h4 className="text-xs font-bold text-slate-900">11. Recovery Heart Rate (Pemulihan Denyut Jantung 1 Menit)</h4>
+                  <span className="text-[11px] text-slate-500 font-medium">Evaluasi Kecepatan Penurunan HR Setelah Latihan</span>
+                </div>
+              </div>
+              <span className="text-xs font-bold px-3 py-1 rounded-full bg-emerald-100 text-emerald-900 border border-emerald-300">
+                Penurunan HR: {functional?.recoveryHrBpm ?? '-'} bpm (Skor: {functional?.skorDeltaHR ?? 'Cukup'})
+              </span>
+            </div>
+            <p className="text-xs text-slate-800 leading-relaxed bg-white p-3 rounded-xl border border-emerald-100 font-medium">
+              {rekomendasiRecoveryHRText}
             </p>
           </div>
 
@@ -468,6 +607,228 @@ export const Screen9RekomendasiAktivitas: React.FC<Screen9RekomendasiAktivitasPr
                       <tr>
                         <td className="p-2 font-bold border border-slate-200 text-rose-800">Sangat Kurang</td>
                         <td className="p-2 border border-slate-200">{getRekomendasiCooperRun('Sangat Kurang')}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {/* Table 6: Sit to Stand 30 Detik */}
+              <div className="space-y-2">
+                <h4 className="font-bold text-slate-900 text-xs text-cyan-900 uppercase">6. Rekomendasi Sit to Stand 30 Detik (Kekuatan Tungkai)</h4>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-[11px] border-collapse border border-slate-300">
+                    <thead>
+                      <tr className="bg-[#0b1a30] text-white font-bold">
+                        <th className="p-2 border border-slate-700 w-1/4">Kategori</th>
+                        <th className="p-2 border border-slate-700">Rekomendasi</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-200 bg-white">
+                      <tr>
+                        <td className="p-2 font-bold border border-slate-200 text-blue-900">Sangat Baik</td>
+                        <td className="p-2 border border-slate-200">{getRekomendasiSitToStand('Sangat Baik')}</td>
+                      </tr>
+                      <tr>
+                        <td className="p-2 font-bold border border-slate-200 text-emerald-800">Baik</td>
+                        <td className="p-2 border border-slate-200">{getRekomendasiSitToStand('Baik')}</td>
+                      </tr>
+                      <tr>
+                        <td className="p-2 font-bold border border-slate-200 text-amber-800">Cukup</td>
+                        <td className="p-2 border border-slate-200">{getRekomendasiSitToStand('Cukup')}</td>
+                      </tr>
+                      <tr>
+                        <td className="p-2 font-bold border border-slate-200 text-orange-800">Kurang</td>
+                        <td className="p-2 border border-slate-200">{getRekomendasiSitToStand('Kurang')}</td>
+                      </tr>
+                      <tr>
+                        <td className="p-2 font-bold border border-slate-200 text-rose-800">Sangat Kurang</td>
+                        <td className="p-2 border border-slate-200">{getRekomendasiSitToStand('Sangat Kurang')}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {/* Table 7: Plank */}
+              <div className="space-y-2">
+                <h4 className="font-bold text-slate-900 text-xs text-teal-900 uppercase">7. Rekomendasi Plank (Core Stability)</h4>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-[11px] border-collapse border border-slate-300">
+                    <thead>
+                      <tr className="bg-[#0b1a30] text-white font-bold">
+                        <th className="p-2 border border-slate-700 w-1/4">Kategori</th>
+                        <th className="p-2 border border-slate-700">Rekomendasi</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-200 bg-white">
+                      <tr>
+                        <td className="p-2 font-bold border border-slate-200 text-blue-900">Sangat Baik</td>
+                        <td className="p-2 border border-slate-200">{getRekomendasiPlank('Sangat Baik')}</td>
+                      </tr>
+                      <tr>
+                        <td className="p-2 font-bold border border-slate-200 text-emerald-800">Baik</td>
+                        <td className="p-2 border border-slate-200">{getRekomendasiPlank('Baik')}</td>
+                      </tr>
+                      <tr>
+                        <td className="p-2 font-bold border border-slate-200 text-amber-800">Cukup</td>
+                        <td className="p-2 border border-slate-200">{getRekomendasiPlank('Cukup')}</td>
+                      </tr>
+                      <tr>
+                        <td className="p-2 font-bold border border-slate-200 text-orange-800">Kurang</td>
+                        <td className="p-2 border border-slate-200">{getRekomendasiPlank('Kurang')}</td>
+                      </tr>
+                      <tr>
+                        <td className="p-2 font-bold border border-slate-200 text-rose-800">Sangat Kurang</td>
+                        <td className="p-2 border border-slate-200">{getRekomendasiPlank('Sangat Kurang')}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {/* Table 8: Balance 1 Kaki */}
+              <div className="space-y-2">
+                <h4 className="font-bold text-slate-900 text-xs text-sky-900 uppercase">8. Rekomendasi Balance 1 Kaki (Keseimbangan)</h4>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-[11px] border-collapse border border-slate-300">
+                    <thead>
+                      <tr className="bg-[#0b1a30] text-white font-bold">
+                        <th className="p-2 border border-slate-700 w-1/4">Kategori</th>
+                        <th className="p-2 border border-slate-700">Rekomendasi</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-200 bg-white">
+                      <tr>
+                        <td className="p-2 font-bold border border-slate-200 text-blue-900">Sangat Baik</td>
+                        <td className="p-2 border border-slate-200">{getRekomendasiBalance('Sangat Baik')}</td>
+                      </tr>
+                      <tr>
+                        <td className="p-2 font-bold border border-slate-200 text-emerald-800">Baik</td>
+                        <td className="p-2 border border-slate-200">{getRekomendasiBalance('Baik')}</td>
+                      </tr>
+                      <tr>
+                        <td className="p-2 font-bold border border-slate-200 text-amber-800">Cukup</td>
+                        <td className="p-2 border border-slate-200">{getRekomendasiBalance('Cukup')}</td>
+                      </tr>
+                      <tr>
+                        <td className="p-2 font-bold border border-slate-200 text-orange-800">Kurang</td>
+                        <td className="p-2 border border-slate-200">{getRekomendasiBalance('Kurang')}</td>
+                      </tr>
+                      <tr>
+                        <td className="p-2 font-bold border border-slate-200 text-rose-800">Sangat Kurang</td>
+                        <td className="p-2 border border-slate-200">{getRekomendasiBalance('Sangat Kurang')}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {/* Table 9: Sit and Reach */}
+              <div className="space-y-2">
+                <h4 className="font-bold text-slate-900 text-xs text-purple-900 uppercase">9. Rekomendasi Sit and Reach (Fleksibilitas)</h4>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-[11px] border-collapse border border-slate-300">
+                    <thead>
+                      <tr className="bg-[#0b1a30] text-white font-bold">
+                        <th className="p-2 border border-slate-700 w-1/4">Kategori</th>
+                        <th className="p-2 border border-slate-700">Rekomendasi</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-200 bg-white">
+                      <tr>
+                        <td className="p-2 font-bold border border-slate-200 text-blue-900">Sangat Baik</td>
+                        <td className="p-2 border border-slate-200">{getRekomendasiSitAndReachFF('Sangat Baik')}</td>
+                      </tr>
+                      <tr>
+                        <td className="p-2 font-bold border border-slate-200 text-emerald-800">Baik</td>
+                        <td className="p-2 border border-slate-200">{getRekomendasiSitAndReachFF('Baik')}</td>
+                      </tr>
+                      <tr>
+                        <td className="p-2 font-bold border border-slate-200 text-amber-800">Cukup</td>
+                        <td className="p-2 border border-slate-200">{getRekomendasiSitAndReachFF('Cukup')}</td>
+                      </tr>
+                      <tr>
+                        <td className="p-2 font-bold border border-slate-200 text-orange-800">Kurang</td>
+                        <td className="p-2 border border-slate-200">{getRekomendasiSitAndReachFF('Kurang')}</td>
+                      </tr>
+                      <tr>
+                        <td className="p-2 font-bold border border-slate-200 text-rose-800">Sangat Kurang</td>
+                        <td className="p-2 border border-slate-200">{getRekomendasiSitAndReachFF('Sangat Kurang')}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {/* Table 10: Step Test Recovery */}
+              <div className="space-y-2">
+                <h4 className="font-bold text-slate-900 text-xs text-orange-900 uppercase">10. Rekomendasi Step Test Recovery (Kardiorespirasi)</h4>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-[11px] border-collapse border border-slate-300">
+                    <thead>
+                      <tr className="bg-[#0b1a30] text-white font-bold">
+                        <th className="p-2 border border-slate-700 w-1/4">Kategori</th>
+                        <th className="p-2 border border-slate-700">Rekomendasi</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-200 bg-white">
+                      <tr>
+                        <td className="p-2 font-bold border border-slate-200 text-blue-900">Sangat Baik</td>
+                        <td className="p-2 border border-slate-200">{getRekomendasiStepTest('Sangat Baik')}</td>
+                      </tr>
+                      <tr>
+                        <td className="p-2 font-bold border border-slate-200 text-emerald-800">Baik</td>
+                        <td className="p-2 border border-slate-200">{getRekomendasiStepTest('Baik')}</td>
+                      </tr>
+                      <tr>
+                        <td className="p-2 font-bold border border-slate-200 text-amber-800">Cukup</td>
+                        <td className="p-2 border border-slate-200">{getRekomendasiStepTest('Cukup')}</td>
+                      </tr>
+                      <tr>
+                        <td className="p-2 font-bold border border-slate-200 text-orange-800">Kurang</td>
+                        <td className="p-2 border border-slate-200">{getRekomendasiStepTest('Kurang')}</td>
+                      </tr>
+                      <tr>
+                        <td className="p-2 font-bold border border-slate-200 text-rose-800">Sangat Kurang</td>
+                        <td className="p-2 border border-slate-200">{getRekomendasiStepTest('Sangat Kurang')}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {/* Table 11: Recovery Heart Rate */}
+              <div className="space-y-2">
+                <h4 className="font-bold text-slate-900 text-xs text-emerald-900 uppercase">11. Rekomendasi Recovery Heart Rate (Pemulihan Denyut Jantung)</h4>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-[11px] border-collapse border border-slate-300">
+                    <thead>
+                      <tr className="bg-[#0b1a30] text-white font-bold">
+                        <th className="p-2 border border-slate-700 w-1/4">Kategori</th>
+                        <th className="p-2 border border-slate-700">Rekomendasi</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-200 bg-white">
+                      <tr>
+                        <td className="p-2 font-bold border border-slate-200 text-blue-900">Sangat Baik</td>
+                        <td className="p-2 border border-slate-200">{getRekomendasiRecoveryHR('Sangat Baik')}</td>
+                      </tr>
+                      <tr>
+                        <td className="p-2 font-bold border border-slate-200 text-emerald-800">Baik</td>
+                        <td className="p-2 border border-slate-200">{getRekomendasiRecoveryHR('Baik')}</td>
+                      </tr>
+                      <tr>
+                        <td className="p-2 font-bold border border-slate-200 text-amber-800">Cukup</td>
+                        <td className="p-2 border border-slate-200">{getRekomendasiRecoveryHR('Cukup')}</td>
+                      </tr>
+                      <tr>
+                        <td className="p-2 font-bold border border-slate-200 text-orange-800">Kurang</td>
+                        <td className="p-2 border border-slate-200">{getRekomendasiRecoveryHR('Kurang')}</td>
+                      </tr>
+                      <tr>
+                        <td className="p-2 font-bold border border-slate-200 text-rose-800">Sangat Kurang</td>
+                        <td className="p-2 border border-slate-200">{getRekomendasiRecoveryHR('Sangat Kurang')}</td>
                       </tr>
                     </tbody>
                   </table>
