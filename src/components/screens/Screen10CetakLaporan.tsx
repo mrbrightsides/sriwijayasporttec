@@ -5,6 +5,13 @@ import autoTable from 'jspdf-autotable';
 import * as XLSX from 'xlsx';
 import { ArrowLeft, ArrowRight, Download, FileSpreadsheet, Printer, Share2, CheckCircle2 } from 'lucide-react';
 import { UnsriLogo } from '../UnsriLogo';
+import {
+  getRekomendasiAktivitasFisik,
+  getRekomendasiIMT,
+  getRekomendasiPushUp,
+  getRekomendasiVerticalJump,
+  getRekomendasiCooperRun,
+} from '../../utils/normaCalculator';
 
 interface Screen10CetakLaporanProps {
   record: AssessmentRecord;
@@ -18,6 +25,12 @@ export const Screen10CetakLaporan: React.FC<Screen10CetakLaporanProps> = ({
   onNext,
 }) => {
   const { peserta, evaluation, imt, tkji, functional, aktivitas, tanggal } = record;
+
+  const recAktivitasFisik = evaluation.rekomendasi.aktivitasFisik || getRekomendasiAktivitasFisik(aktivitas.kategoriAktivitas);
+  const recIMT = evaluation.rekomendasi.imt || getRekomendasiIMT(imt.kategoriIMT);
+  const recPushUp = evaluation.rekomendasi.pushUp || getRekomendasiPushUp(tkji.skorPushUp);
+  const recVerticalJump = evaluation.rekomendasi.verticalJump || getRekomendasiVerticalJump(tkji.skorVerticalJump);
+  const recCooperRun = evaluation.rekomendasi.cooperRun || getRekomendasiCooperRun(tkji.skorCooper);
 
   const handleExportPDF = () => {
     const doc = new jsPDF();
@@ -74,16 +87,21 @@ export const Screen10CetakLaporan: React.FC<Screen10CetakLaporanProps> = ({
 
     // Rekomendasi
     const lastY2 = (doc as any).lastAutoTable.finalY || 140;
-    doc.text('REKOMENDASI PROGRAM AKTIVITAS', 14, lastY2 + 12);
+    doc.text('REKOMENDASI PROGRAM AKTIVITAS BERDASARKAN HASIL TES', 14, lastY2 + 12);
 
     autoTable(doc, {
       startY: lastY2 + 16,
       theme: 'grid',
       body: [
-        ['Daya Tahan', evaluation.rekomendasi.dayaTahan],
-        ['Kekuatan', evaluation.rekomendasi.kekuatan],
-        ['Fleksibilitas', evaluation.rekomendasi.fleksibilitas],
-        ['Aktivitas Harian', evaluation.rekomendasi.aktivitasHarian],
+        ['Aktivitas Fisik Harian', recAktivitasFisik],
+        ['Status Gizi (IMT)', recIMT],
+        ['Push-Up 60 Detik (Daya Tahan Otot)', recPushUp],
+        ['Vertical Jump (Power Tungkai)', recVerticalJump],
+        ['Lari 12 Menit (Cooper Test)', recCooperRun],
+        ['Daya Tahan Kardiorespirasi Umum', evaluation.rekomendasi.dayaTahan],
+        ['Kekuatan & Daya Tahan Otot Umum', evaluation.rekomendasi.kekuatan],
+        ['Fleksibilitas Sendi', evaluation.rekomendasi.fleksibilitas],
+        ['Aktivitas Harian Aktif', evaluation.rekomendasi.aktivitasHarian],
       ],
     });
 
@@ -97,9 +115,19 @@ export const Screen10CetakLaporan: React.FC<Screen10CetakLaporanProps> = ({
       { 'Parameter': 'Umur', 'Nilai': `${peserta.umur} Tahun` },
       { 'Parameter': 'Komunitas', 'Nilai': peserta.komunitas },
       { 'Parameter': 'Tanggal Tes', 'Nilai': tanggal },
+      { 'Parameter': 'Kategori Aktivitas Fisik', 'Nilai': aktivitas.kategoriAktivitas },
       { 'Parameter': 'Skor Aktivitas Fisik', 'Nilai': aktivitas.skorAktivitas },
+      { 'Parameter': 'Rekomendasi Aktivitas Fisik', 'Nilai': recAktivitasFisik },
       { 'Parameter': 'Nilai IMT', 'Nilai': imt.nilaiIMT },
+      { 'Parameter': 'Kategori IMT', 'Nilai': imt.kategoriIMT },
       { 'Parameter': 'Skor IMT', 'Nilai': imt.skorIMT },
+      { 'Parameter': 'Rekomendasi IMT', 'Nilai': recIMT },
+      { 'Parameter': 'Push-Up Repetisi', 'Nilai': tkji.pushUpRepetisi },
+      { 'Parameter': 'Rekomendasi Push-Up', 'Nilai': recPushUp },
+      { 'Parameter': 'Vertical Jump (cm)', 'Nilai': tkji.verticalJumpCm },
+      { 'Parameter': 'Rekomendasi Vertical Jump', 'Nilai': recVerticalJump },
+      { 'Parameter': 'Lari 12 Menit Jarak (m)', 'Nilai': tkji.cooperDistanceMeter },
+      { 'Parameter': 'Rekomendasi Lari 12 Menit', 'Nilai': recCooperRun },
       { 'Parameter': 'Skor TKJI', 'Nilai': tkji.totalSkorTKJI },
       { 'Parameter': 'Skor Functional Fitness', 'Nilai': functional.totalSkorFunctional },
       { 'Parameter': 'TOTAL SKOR KEBUGARAN', 'Nilai': evaluation.totalSkor },
@@ -229,6 +257,35 @@ export const Screen10CetakLaporan: React.FC<Screen10CetakLaporanProps> = ({
                   </tr>
                 </tbody>
               </table>
+            </div>
+          </div>
+
+          {/* Rekomendasi Section in Document */}
+          <div className="space-y-2">
+            <h4 className="text-xs font-bold text-slate-800 uppercase tracking-wider">
+              REKOMENDASI PROGRAM AKTIVITAS BERDASARKAN HASIL TES
+            </h4>
+            <div className="border border-slate-200 rounded-xl p-3 bg-slate-50/80 space-y-2 text-xs">
+              <div>
+                <strong className="text-blue-900 block font-bold">1. Aktivitas Fisik ({aktivitas.kategoriAktivitas}):</strong>
+                <p className="text-slate-700 leading-relaxed mt-0.5">{recAktivitasFisik}</p>
+              </div>
+              <div className="pt-2 border-t border-slate-200">
+                <strong className="text-emerald-900 block font-bold">2. Indeks Massa Tubuh / Status Gizi ({imt.kategoriIMT}):</strong>
+                <p className="text-slate-700 leading-relaxed mt-0.5">{recIMT}</p>
+              </div>
+              <div className="pt-2 border-t border-slate-200">
+                <strong className="text-indigo-900 block font-bold">3. Push-Up 60 Detik / Daya Tahan Otot (Hasil: {tkji.pushUpRepetisi} reps):</strong>
+                <p className="text-slate-700 leading-relaxed mt-0.5">{recPushUp}</p>
+              </div>
+              <div className="pt-2 border-t border-slate-200">
+                <strong className="text-amber-900 block font-bold">4. Vertical Jump / Power Tungkai (Hasil: {tkji.verticalJumpCm} cm):</strong>
+                <p className="text-slate-700 leading-relaxed mt-0.5">{recVerticalJump}</p>
+              </div>
+              <div className="pt-2 border-t border-slate-200">
+                <strong className="text-rose-900 block font-bold">5. Lari 12 Menit / Kapasitas Kardiorespirasi (Hasil: {tkji.cooperDistanceMeter} m):</strong>
+                <p className="text-slate-700 leading-relaxed mt-0.5">{recCooperRun}</p>
+              </div>
             </div>
           </div>
 

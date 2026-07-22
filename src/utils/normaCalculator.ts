@@ -448,6 +448,112 @@ export function calculateFunctionalFitness(
   };
 }
 
+export function getRekomendasiAktivitasFisik(kategori: string): string {
+  switch (kategori) {
+    case 'Sangat Tinggi':
+      return 'Pertahankan pola aktivitas fisik saat ini, sertakan latihan pemulihan (recovery), peregangan, dan istirahat yang cukup untuk mencegah overtraining.';
+    case 'Tinggi':
+      return 'Pertahankan frekuensi latihan dan variasikan jenis aktivitas fisik agar seluruh komponen kebugaran tetap berkembang secara seimbang.';
+    case 'Sedang':
+      return 'Tingkatkan durasi atau frekuensi latihan hingga memenuhi rekomendasi WHO, yaitu minimal 150–300 menit aktivitas fisik intensitas sedang setiap minggu.';
+    case 'Rendah':
+      return 'Tingkatkan aktivitas fisik secara bertahap melalui jalan cepat, jogging ringan, bersepeda, atau senam sebanyak 3–5 kali per minggu dengan durasi 30–60 menit per sesi.';
+    case 'Sangat Rendah':
+    default:
+      return 'Mulailah aktivitas fisik ringan seperti berjalan kaki 15–20 menit setiap hari, kemudian tingkatkan durasi dan intensitas secara bertahap sesuai kemampuan fisik.';
+  }
+}
+
+export function getRekomendasiIMT(kategori: string): string {
+  switch (kategori) {
+    case 'Kurus':
+    case 'Underweight':
+    case 'Underweight (Kekurangan Berat Badan)':
+      return 'Tingkatkan asupan energi dan protein berkualitas (1,2–1,6 g/kgBB/hari), lakukan latihan kekuatan (resistance training) 2–3 kali/minggu dengan intensitas 60–70% HRmax atau 60–70% 1RM, 2–3 set × 8–12 repetisi untuk setiap kelompok otot utama (misalnya squat, push-up, row, shoulder press). Tambahkan aktivitas aerobik intensitas sedang selama 150 menit/minggu (misalnya jalan cepat atau bersepeda ringan 30 menit, 5 hari/minggu) dan konsultasikan dengan ahli gizi apabila diperlukan.';
+    case 'Normal':
+      return 'Pertahankan pola makan seimbang dan gaya hidup aktif. Lakukan aktivitas aerobik intensitas sedang 150–300 menit/minggu atau 75–150 menit/minggu intensitas tinggi, dikombinasikan dengan latihan kekuatan minimal 2 kali/minggu pada seluruh kelompok otot utama (2–4 set × 8–12 repetisi, intensitas 60–80% 1RM). Tambahkan latihan fleksibilitas dan keseimbangan 2–3 kali/minggu untuk mempertahankan kebugaran secara menyeluruh.';
+    case 'Overweight':
+    case 'Overweight (Kelebihan Berat Badan Tingkat Ringan)':
+      return 'Tingkatkan aktivitas aerobik menjadi 250–300 menit/minggu dengan intensitas 60–75% HRmax(misalnya jalan cepat, jogging, bersepeda atau berenang selama 45–60 menit, 5 hari/minggu). Lakukan latihan kekuatan 3 kali/minggu (2–3 set × 10–15 repetisi, intensitas 60–70% 1RM) untuk mempertahankan massa otot. Kurangi asupan kalori serta konsumsi makanan tinggi gula, garam, dan lemak jenuh.';
+    case 'Obesitas Class I':
+    case 'Obesity Class I':
+    case 'Obesity Class I (Obesitas Ringan)':
+      return 'Mulailah dengan aktivitas aerobik berdampak rendah (low impact) seperti jalan cepat, sepeda statis, atau berenang dengan intensitas 50–65% HRmax, target 300 menit/minggu secara bertahap. Tambahkan latihan kekuatan 2–3 kali/minggu menggunakan beban ringan (2–3 set × 10–12 repetisi) seperti chair squat, wall push-up, dan resistance band. Lakukan pemanasan dan pendinginan masing-masing 5–10 menit serta evaluasi perkembangan setiap 4–6 minggu.';
+    case 'Obesitas Class II':
+    case 'Obesity Class II':
+    case 'Obesity Class II (Obesitas Sedang)':
+      return 'Fokus pada peningkatan aktivitas fisik secara bertahap melalui jalan kaki, sepeda statis, senam air, atau berenang dengan intensitas 40–60% HRmax, durasi 30–45 menit, 5–6 kali/minggu. Lakukan latihan kekuatan ringan 2 kali/minggu (2 set × 8–12 repetisi) menggunakan berat badan atau resistance band untuk meningkatkan kemampuan fungsional. Tingkatkan durasi latihan sekitar 5–10 menit setiap minggusesuai toleransi tubuh. Disarankan berkonsultasi dengan tenaga kesehatan sebelum memulai program latihan.';
+    case 'Obesitas Class III':
+    case 'Obesity Class III':
+    case 'Obesity Class III (Obesitas Berat)':
+    default:
+      return 'Mulailah dengan aktivitas fisik ringan seperti jalan santai, latihan menggunakan kursi (chair exercise), latihan pernapasan, dan peregangan dengan intensitas 40–50% HRmax, durasi 20–30 menit, 5–7 kali/minggu. Tambahkan latihan kekuatan ringan (2 set × 8–10 repetisi) seperti chair stand, wall push-up, dan resistance band sesuai kemampuan. Program latihan dilakukan secara progresif dengan pengawasan tenaga kesehatan, terutama apabila terdapat penyakit penyerta (komorbiditas) seperti diabetes, hipertensi, atau penyakit jantung.';
+  }
+}
+
+export function getRekomendasiPushUp(val: number | string): string {
+  const kat = typeof val === 'number'
+    ? (val >= 85 ? 'Sangat Baik' : val >= 70 ? 'Baik' : val >= 55 ? 'Cukup' : val >= 45 ? 'Kurang' : 'Sangat Kurang')
+    : val;
+  const str = String(kat).toLowerCase();
+
+  if (str.includes('sangat baik')) {
+    return 'Hasil menunjukkan bahwa daya tahan otot tubuh bagian atas, khususnya otot dada (pectoralis major), bahu (deltoid), lengan (triceps brachii), serta otot inti (core muscles), berada pada kategori sangat baik. Kondisi ini menunjukkan kemampuan otot untuk melakukan kontraksi berulang dalam waktu yang lama tanpa mengalami kelelahan yang berarti. Kemampuan tersebut sangat mendukung aktivitas sehari-hari, pekerjaan yang membutuhkan kekuatan tubuh bagian atas, maupun performa olahraga. Untuk mempertahankan kondisi ini, lakukan latihan kekuatan dan daya tahan otot 2–3 kali per minggu melalui push-up, incline push-up, decline push-up, bench press, dumbbell press, dips, dan plank dengan intensitas 70–85% 1RM, 3–4 set × 12–20 repetisi. Tambahkan circuit training atau upper body interval training sebanyak 1–2 kali per minggu untuk meningkatkan kapasitas otot. Pastikan melakukan pemanasan dan pendinginan selama 5–10 menit, serta evaluasi kemampuan setiap 8–12 minggu.';
+  }
+  if (str.includes('baik')) {
+    return 'Hasil menunjukkan bahwa daya tahan otot tubuh bagian atas berada pada kategori baik. Otot telah mampu bekerja secara efektif dalam aktivitas berulang, namun masih memiliki peluang untuk ditingkatkan agar mencapai performa yang lebih optimal. Disarankan melakukan latihan kekuatan otot 2–3 kali per minggu menggunakan push-up, incline push-up, dumbbell chest press, shoulder press, triceps dip, dan plank dengan intensitas 60–75% 1RM, 3 set × 10–15 repetisi. Tambahkan latihan fungsional seperti medicine ball throw atau battle rope untuk meningkatkan daya tahan otot. Tingkatkan jumlah repetisi atau beban sekitar 5–10% setiap 2–3 minggu apabila latihan dapat dilakukan dengan teknik yang baik tanpa kelelahan berlebihan.';
+  }
+  if (str.includes('cukup') || str.includes('sedang')) {
+    return 'Hasil menunjukkan bahwa daya tahan otot tubuh bagian atas berada pada kategori cukup sehingga kemampuan mempertahankan kontraksi otot secara berulang masih perlu ditingkatkan. Kondisi ini dapat menyebabkan kelelahan lebih cepat saat melakukan aktivitas yang melibatkan dorongan, angkatan, atau penopangan berat badan. Untuk meningkatkan kemampuan tersebut, lakukan modified push-up, incline push-up, wall push-up, dumbbell press ringan, resistance band chest press, dan plank sebanyak 3 kali per minggu dengan intensitas 50–60% 1RM, 2–3 set × 10–12 repetisi. Kombinasikan dengan latihan otot inti (core stability) dan latihan aerobik intensitas sedang selama 30–45 menit, 3–5 kali per minggu. Fokus pada teknik gerakan yang benar dan tingkatkan repetisi secara bertahap sesuai kemampuan.';
+  }
+  if (str.includes('kurang') && !str.includes('sangat')) {
+    return 'Hasil menunjukkan bahwa daya tahan otot tubuh bagian atas masih berada di bawah rata-rata sehingga otot lebih cepat mengalami kelelahan saat melakukan aktivitas berulang. Kondisi ini dapat memengaruhi kemampuan melakukan aktivitas sehari-hari maupun aktivitas olahraga yang membutuhkan kekuatan lengan dan bahu. Disarankan memulai latihan secara bertahap menggunakan wall push-up, incline push-up, resistance band exercise, dumbbell ringan (1–3 kg), seated chest press, dan modified plank sebanyak 3 kali per minggu dengan intensitas 40–60% 1RM, 2 set × 8–10 repetisi. Tambahkan latihan mobilitas bahu dan peregangan otot dada setelah latihan. Tingkatkan jumlah repetisi sekitar 1–2 repetisi setiap minggu apabila latihan dapat dilakukan tanpa nyeri dan dengan teknik yang benar.';
+  }
+  return 'Hasil menunjukkan bahwa daya tahan otot tubuh bagian atas berada pada kategori sangat rendah sehingga kemampuan otot dalam mempertahankan kontraksi berulang masih sangat terbatas. Kondisi ini dapat menyebabkan cepat lelah saat mengangkat, mendorong, atau menopang berat badan, serta meningkatkan risiko cedera akibat kelemahan otot. Disarankan memulai latihan menggunakan wall push-up, standing push-up, resistance band chest press, shoulder flexion menggunakan resistance band, seated arm press, dan latihan penguatan otot inti ringan sebanyak 3 kali per minggu, dengan intensitas 40–50% 1RM, 2 set × 8 repetisi. Seluruh latihan dilakukan secara perlahan dengan memperhatikan teknik gerakan dan pola pernapasan yang benar. Lakukan pemanasan selama 5–10 menit sebelum latihan dan pendinginan setelah latihan. Apabila terdapat riwayat cedera bahu, siku, pergelangan tangan, atau penyakit muskuloskeletal lainnya, disarankan berkonsultasi dengan fisioterapis atau tenaga kesehatan sebelum meningkatkan intensitas latihan.';
+}
+
+export function getRekomendasiVerticalJump(val: number | string): string {
+  const kat = typeof val === 'number'
+    ? (val >= 85 ? 'Sangat Baik' : val >= 70 ? 'Baik' : val >= 55 ? 'Cukup' : val >= 45 ? 'Kurang' : 'Sangat Kurang')
+    : val;
+  const str = String(kat).toLowerCase();
+
+  if (str.includes('sangat baik')) {
+    return 'Hasil menunjukkan bahwa power otot tungkai berada pada kategori sangat baik. Kondisi ini menunjukkan kemampuan otot tungkai menghasilkan gaya secara maksimal dalam waktu yang sangat singkat sehingga mendukung performa pada aktivitas yang membutuhkan kecepatan, kelincahan, akselerasi, dan lompatan eksplosif. Kemampuan ini juga mencerminkan koordinasi neuromuskular yang baik antara otot, tendon, dan sistem saraf. Untuk mempertahankan kemampuan tersebut, lakukan latihan power 2–3 kali per minggu melalui box jump, squat jump, countermovement jump, tuck jump, bounding, lateral jump, dan depth jump dengan intensitas 70–90% kemampuan maksimal, 3–5 set × 5–8 repetisi disertai waktu istirahat 2–3 menit antar set agar kualitas gerakan tetap optimal. Kombinasikan dengan latihan kekuatan seperti back squat, front squat, Romanian deadlift, lunges, dan hip thrust pada intensitas 70–85% 1RM, sebanyak 3–4 set × 6–10 repetisi. Evaluasi kemampuan setiap 8–12 minggu untuk memastikan peningkatan performa tetap terjaga.';
+  }
+  if (str.includes('baik')) {
+    return 'Hasil menunjukkan bahwa power otot tungkai berada pada kategori baik, namun masih dapat ditingkatkan untuk menghasilkan daya ledak yang lebih optimal. Disarankan melakukan latihan power 2–3 kali per minggu menggunakan jump squat, box jump, split jump, lateral hop, skipping, dan medicine ball squat throw dengan intensitas 60–80% kemampuan maksimal, 3–4 set × 6–10 repetisi. Tambahkan latihan kekuatan berupa squat, leg press, step-up, dan lunges pada intensitas 60–75% 1RM, 3 set × 8–12 repetisi. Tingkatkan tinggi lompatan atau beban latihan sekitar 5–10% setiap 2–3 minggu apabila teknik gerakan tetap baik dan tidak menimbulkan nyeri.';
+  }
+  if (str.includes('cukup') || str.includes('sedang')) {
+    return 'Hasil menunjukkan bahwa power otot tungkai berada pada kategori cukup sehingga kemampuan menghasilkan gaya eksplosif masih perlu ditingkatkan. Kondisi ini dapat memengaruhi kemampuan berlari cepat, melompat, mengubah arah gerakan, maupun aktivitas olahraga lainnya. Untuk meningkatkan kemampuan tersebut, lakukan jump squat ringan, squat, step-up, calf raise, skipping, dan standing broad jump sebanyak 2–3 kali per minggu dengan intensitas 50–70% 1RM, 2–3 set × 8–12 repetisi. Kombinasikan dengan latihan keseimbangan, core stability, dan aktivitas aerobik intensitas sedang selama 30–45 menit, 3–5 kali per minggu. Fokus pada teknik pendaratan yang benar untuk mengurangi risiko cedera dan tingkatkan volume latihan secara bertahap sesuai kemampuan.';
+  }
+  if (str.includes('kurang') && !str.includes('sangat')) {
+    return 'Hasil menunjukkan bahwa power otot tungkai berada di bawah rata-rata sehingga kemampuan menghasilkan tenaga secara cepat masih terbatas. Kondisi ini dapat menyebabkan penurunan performa dalam aktivitas yang membutuhkan lompatan, sprint, maupun perubahan arah gerakan secara cepat. Disarankan memulai latihan secara bertahap melalui bodyweight squat, chair squat, step-up, calf raise, glute bridge, dan mini jump sebanyak 2–3 kali per minggu dengan intensitas 40–60% 1RM, 2 set × 8–10 repetisi. Setelah kekuatan dasar meningkat, latihan dapat dilanjutkan dengan jump squat ringan atau low box jump. Tingkatkan repetisi atau tinggi lompatan secara bertahap sekitar 5–10% setiap minggu sesuai kemampuan dan tetap memperhatikan teknik pendaratan yang aman.';
+  }
+  return 'Hasil menunjukkan bahwa power otot tungkai berada pada kategori sangat rendah sehingga kemampuan menghasilkan tenaga eksplosif masih sangat terbatas. Kondisi ini dapat memengaruhi kemampuan melakukan aktivitas fungsional seperti naik tangga, berdiri dari posisi duduk, maupun aktivitas olahraga yang membutuhkan daya ledak. Disarankan memulai latihan menggunakan chair squat, sit-to-stand, calf raise, wall squat, glute bridge, dan marching exercise sebanyak 2–3 kali per minggu dengan intensitas 40–50% 1RM, 2 set × 8 repetisi. Setelah kekuatan dasar meningkat, latihan dapat dilanjutkan dengan step-up dan mini jump secara bertahap. Lakukan pemanasan selama 5–10 menit sebelum latihan serta pendinginan setelah latihan. Apabila terdapat riwayat cedera lutut, pergelangan kaki, panggul, atau gangguan muskuloskeletal lainnya, latihan sebaiknya dilakukan di bawah supervisi fisioterapis atau tenaga kesehatan sebelum meningkatkan intensitas maupun volume latihan.';
+}
+
+export function getRekomendasiCooperRun(val: number | string): string {
+  const kat = typeof val === 'number'
+    ? (val >= 85 ? 'Sangat Baik' : val >= 70 ? 'Baik' : val >= 55 ? 'Cukup' : val >= 45 ? 'Kurang' : 'Sangat Kurang')
+    : val;
+  const str = String(kat).toLowerCase();
+
+  if (str.includes('sangat baik')) {
+    return 'Hasil menunjukkan bahwa kapasitas kardiorespirasi (VO₂max) berada pada kategori sangat baik. Kondisi ini menunjukkan kemampuan jantung, paru-paru, dan sistem sirkulasi dalam memasok oksigen ke otot bekerja secara sangat efisien sehingga mampu mempertahankan aktivitas aerobik dengan intensitas tinggi dalam waktu yang relatif lama. Kapasitas aerobik yang tinggi juga berhubungan dengan penurunan risiko penyakit kardiovaskular, peningkatan produktivitas fisik, dan performa olahraga yang lebih baik. Untuk mempertahankan kondisi ini, lakukan latihan aerobik 3–5 kali per minggu dengan intensitas 70–85% HRmax selama 30–60 menit melalui lari, jogging, bersepeda, berenang, rowing, atau elliptical training. Tambahkan High Intensity Interval Training (HIIT) sebanyak 1–2 kali per minggu menggunakan pola 4–6 interval × 2–4 menit pada 80–90% HRmax dengan pemulihan aktif selama 2–3 menit. Kombinasikan dengan latihan kekuatan 2–3 kali per minggu, lakukan pemanasan dan pendinginan selama 5–10 menit, serta evaluasi hasil Cooper Test setiap 8–12 minggu untuk mempertahankan kapasitas aerobik yang optimal.';
+  }
+  if (str.includes('baik')) {
+    return 'Hasil menunjukkan bahwa kapasitas kardiorespirasi berada pada kategori baik. Kemampuan tubuh dalam menggunakan oksigen selama aktivitas fisik telah berkembang dengan baik, namun masih memiliki peluang untuk ditingkatkan agar efisiensi kerja jantung dan paru menjadi lebih optimal. Disarankan melakukan latihan aerobik 4–5 kali per minggu dengan intensitas 60–75% HRmax selama 30–60 menit melalui jogging, jalan cepat, bersepeda, berenang, atau senam aerobik. Tambahkan latihan interval sedang sebanyak 1 kali per minggu menggunakan pola 5 interval × 2 menit pada intensitas 75–80% HRmax dengan pemulihan aktif. Tingkatkan jarak tempuh atau durasi latihan sekitar 5–10% setiap 2–3 minggu apabila tubuh telah beradaptasi dengan baik terhadap beban latihan.';
+  }
+  if (str.includes('cukup') || str.includes('sedang')) {
+    return 'Hasil menunjukkan bahwa kapasitas kardiorespirasi berada pada kategori cukup sehingga kemampuan tubuh dalam memanfaatkan oksigen selama aktivitas fisik masih belum optimal. Kondisi ini dapat menyebabkan kelelahan lebih cepat saat melakukan aktivitas yang berlangsung dalam waktu lama. Untuk meningkatkan kapasitas aerobik, lakukan aktivitas aerobik 4–5 kali per minggu selama 30–45 menit pada intensitas 55–70% HRmax melalui jalan cepat, jogging ringan, bersepeda, berenang, atau senam aerobik. Tambahkan latihan interval sedang berupa 4–6 interval × 1–2 menit pada intensitas 70–75% HRmax yang diselingi jalan kaki selama 2 menit. Kombinasikan dengan latihan kekuatan tubuh bagian bawah dan latihan inti (core stability) sebanyak 2 kali per minggu untuk meningkatkan efisiensi gerakan saat berlari.';
+  }
+  if (str.includes('kurang') && !str.includes('sangat')) {
+    return 'Hasil menunjukkan bahwa kapasitas kardiorespirasi berada di bawah rata-rata sehingga kemampuan jantung dan paru dalam menyuplai oksigen saat aktivitas fisik masih terbatas. Kondisi ini menyebabkan tubuh lebih cepat lelah dan memerlukan waktu pemulihan yang lebih lama setelah beraktivitas. Disarankan memulai latihan secara bertahap melalui jalan cepat, jogging ringan, bersepeda statis, atau berenang ringan sebanyak 5 kali per minggu dengan durasi 20–30 menit pada intensitas 50–65% HRmax. Setelah tubuh mulai beradaptasi, tambahkan interval jogging selama 1 menit yang diselingi jalan kaki selama 2 menit sebanyak 3–5 pengulangan. Tingkatkan durasi latihan sekitar 5 menit setiap minggu hingga mencapai target 150–300 menit aktivitas aerobik per minggu. Pastikan melakukan pemanasan dan pendinginan selama 5–10 menit pada setiap sesi latihan.';
+  }
+  return 'Hasil menunjukkan bahwa kapasitas kardiorespirasi berada pada kategori sangat rendah sehingga kemampuan tubuh dalam melakukan aktivitas aerobik masih sangat terbatas. Kondisi ini dapat meningkatkan risiko cepat lelah saat melakukan aktivitas sehari-hari serta berkaitan dengan rendahnya tingkat kebugaran jasmani. Disarankan memulai latihan menggunakan aktivitas aerobik berdampak rendah (low impact) seperti jalan santai, sepeda statis tanpa beban, latihan air (aquatic exercise), atau chair exercise sebanyak 5–7 kali per minggu, durasi 15–20 menit per sesi pada intensitas 40–55% HRmax. Setelah tubuh mulai beradaptasi, tingkatkan durasi latihan sekitar 5 menit setiap minggu hingga mencapai 30–45 menit per sesi. Tambahkan latihan kekuatan ringan 2 kali per minggu untuk meningkatkan kapasitas fungsional tubuh secara menyeluruh. Seluruh latihan harus diawali dengan pemanasan dan diakhiri pendinginan selama 5–10 menit. Apabila pengguna memiliki riwayat penyakit jantung, hipertensi tidak terkontrol, penyakit paru kronis, diabetes, atau mengalami keluhan seperti nyeri dada, sesak napas berat, pusing, atau denyut jantung tidak teratur selama latihan, segera hentikan aktivitas dan konsultasikan dengan dokter atau tenaga kesehatan sebelum melanjutkan program latihan.';
+}
+
 // 5. EVALUASI TOTAL & NORMA AKHIR SRIWIJAYA SPORT TEC
 export function evaluateSriwijayaSportTec(
   aktivitas: AktivitasFisik,
@@ -500,6 +606,12 @@ export function evaluateSriwijayaSportTec(
     aktivitasHarian = 'Hindari perilaku sedenter, perbanyak bergerak setiap 1 jam sekali.';
   }
 
+  const rekomendasiAktivitasFisik = getRekomendasiAktivitasFisik(aktivitas.kategoriAktivitas);
+  const rekomendasiIMT = getRekomendasiIMT(imt.kategoriIMT);
+  const rekomendasiPushUp = getRekomendasiPushUp(tkji.skorPushUp);
+  const rekomendasiVerticalJump = getRekomendasiVerticalJump(tkji.skorVerticalJump);
+  const rekomendasiCooperRun = getRekomendasiCooperRun(tkji.skorCooper);
+
   return {
     skorAktivitas,
     skorIMT,
@@ -512,6 +624,11 @@ export function evaluateSriwijayaSportTec(
       kekuatan,
       fleksibilitas,
       aktivitasHarian,
+      aktivitasFisik: rekomendasiAktivitasFisik,
+      imt: rekomendasiIMT,
+      pushUp: rekomendasiPushUp,
+      verticalJump: rekomendasiVerticalJump,
+      cooperRun: rekomendasiCooperRun,
     },
     tanggalTes: new Date().toLocaleDateString('id-ID', {
       day: 'numeric',

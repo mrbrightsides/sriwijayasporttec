@@ -106,6 +106,11 @@ export interface EvaluationResult {
     kekuatan: string;
     fleksibilitas: string;
     aktivitasHarian: string;
+    aktivitasFisik?: string;
+    imt?: string;
+    pushUp?: string;
+    verticalJump?: string;
+    cooperRun?: string;
   };
   tanggalTes: string;
 }
