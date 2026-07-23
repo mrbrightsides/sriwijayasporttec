@@ -40,7 +40,7 @@ export const Screen5TesTKJI: React.FC<Screen5TesTKJIProps> = ({
             5
           </div>
           <div>
-            <h2 className="text-base font-bold text-white">Tes Kebugaran Jasmani Indonesia (TKJI)</h2>
+            <h2 className="text-base font-bold text-white">Tes Kebugaran Jasmani</h2>
             <p className="text-xs text-slate-300">Pengukuran daya tahan kardiorespirasi, daya tahan otot, dan power tungkai</p>
           </div>
         </div>
@@ -58,7 +58,7 @@ export const Screen5TesTKJI: React.FC<Screen5TesTKJIProps> = ({
               <Dumbbell className="w-6 h-6" />
             </div>
             <div>
-              <div className="text-xs text-slate-300 font-semibold">Skor Akhir TKJI ({peserta.jenisKelamin})</div>
+              <div className="text-xs text-slate-300 font-semibold">Skor Akhir Tes Kebugaran ({peserta.jenisKelamin})</div>
               <div className="text-[11px] text-slate-400">
                 Cooper (40%) + Push-Up (30%) + Vertical Jump (30%)
               </div>

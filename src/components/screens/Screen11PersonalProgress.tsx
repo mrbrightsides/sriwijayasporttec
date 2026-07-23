@@ -150,7 +150,7 @@ export const Screen11PersonalProgress: React.FC<Screen11PersonalProgressProps> =
       fullMark: 100,
     },
     {
-      subject: 'Tes TKJI',
+      subject: 'Tes Kebugaran',
       skor: tkji.totalSkorTKJI || 50,
       benchmark: 72,
       fullMark: 100,
@@ -173,7 +173,7 @@ export const Screen11PersonalProgress: React.FC<Screen11PersonalProgressProps> =
   const componentScores = [
     { name: 'Aktivitas Fisik', score: aktivitas.skorAktivitas || 0 },
     { name: 'Komposisi Tubuh (IMT)', score: imt.skorIMT || 0 },
-    { name: 'Tes TKJI', score: tkji.totalSkorTKJI || 0 },
+    { name: 'Tes Kebugaran', score: tkji.totalSkorTKJI || 0 },
     { name: 'Functional Fitness', score: functional.totalSkorFunctional || 0 },
     { name: 'Pemulihan Denyut Jantung', score: functional.skorDeltaHR || 70 },
   ];
@@ -189,7 +189,7 @@ export const Screen11PersonalProgress: React.FC<Screen11PersonalProgressProps> =
 ----------------------------------------
 📊 *TOTAL SKOR KEBUGARAN*: *${evaluation.totalSkor} / 100* (${evaluation.kategoriAkhir.toUpperCase()})
 • IMT: ${imt.nilaiIMT || '-'} kg/m² (${imt.kategoriIMT || '-'})
-• TKJI: ${tkji.totalSkorTKJI} Poin (${tkji.kategoriTKJI})
+• Tes Kebugaran: ${tkji.totalSkorTKJI} Poin (${tkji.kategoriTKJI})
 • Functional Fitness: ${functional.totalSkorFunctional} Poin (${functional.kategoriFunctional})
 • Level Aktivitas: ${aktivitas.kategoriAktivitas}
 
@@ -310,10 +310,10 @@ Tetap semangat menjaga kesehatan & kebugaran jasmani bersama Sriwijaya Sport Tec
           </div>
         </div>
 
-        {/* TKJI */}
+        {/* Tes Kebugaran */}
         <div className="bg-gradient-to-br from-purple-50 to-slate-50 p-3.5 rounded-xl border border-purple-200 shadow-sm space-y-1">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-bold text-purple-900">Skor TKJI</span>
+            <span className="text-[11px] font-bold text-purple-900">Skor Tes Kebugaran</span>
             <Dumbbell className="w-4 h-4 text-purple-600" />
           </div>
           <div className="text-xl font-bold text-slate-900">{tkji.totalSkorTKJI}</div>
@@ -491,7 +491,7 @@ Tetap semangat menjaga kesehatan & kebugaran jasmani bersama Sriwijaya Sport Tec
                             <span className="font-extrabold text-emerald-400">{data.totalSkor} Poin</span>
                           </div>
                           <div className="flex justify-between space-x-4">
-                            <span className="text-purple-300">Skor TKJI:</span>
+                            <span className="text-purple-300">Skor Tes Kebugaran:</span>
                             <span className="font-bold text-purple-300">{data.skorTKJI} Poin</span>
                           </div>
                           <div className="flex justify-between space-x-4">
@@ -522,7 +522,7 @@ Tetap semangat menjaga kesehatan & kebugaran jasmani bersama Sriwijaya Sport Tec
                 <Line
                   type="monotone"
                   dataKey="skorTKJI"
-                  name="Skor TKJI"
+                  name="Skor Tes Kebugaran"
                   stroke="#9333ea"
                   strokeWidth={2}
                   strokeDasharray="4 4"

@@ -75,7 +75,7 @@ export const Screen7AnalisisSistem: React.FC<Screen7AnalisisSistemProps> = ({
                   </tr>
 
                   <tr className="hover:bg-slate-50">
-                    <td className="p-3 font-bold text-slate-900">Tes TKJI</td>
+                    <td className="p-3 font-bold text-slate-900">Tes Kebugaran</td>
                     <td className="p-3 text-center">{tkji.totalSkorTKJI} ({tkji.kategoriTKJI})</td>
                     <td className="p-3 text-center font-bold text-emerald-600">35%</td>
                     <td className="p-3 text-right font-black text-blue-900">
@@ -98,7 +98,7 @@ export const Screen7AnalisisSistem: React.FC<Screen7AnalisisSistemProps> = ({
             {/* Formula display */}
             <div className="bg-slate-50 p-3 rounded-xl border border-slate-200 text-[11px] text-slate-600 font-mono">
               <strong>Rumus Sriwijaya Sport Tec:</strong><br />
-              Total = (Aktivitas × 15%) + (IMT × 15%) + (TKJI × 35%) + (Functional × 35%)
+              Total = (Aktivitas × 15%) + (IMT × 15%) + (Tes Kebugaran × 35%) + (Functional × 35%)
             </div>
           </div>
 

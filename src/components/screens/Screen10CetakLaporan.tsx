@@ -92,7 +92,7 @@ export const Screen10CetakLaporan: React.FC<Screen10CetakLaporanProps> = ({
       body: [
         ['Aktivitas Fisik (15%)', `${aktivitas.skorAktivitas}/100`, aktivitas.kategoriAktivitas],
         ['Indeks Massa Tubuh (IMT) (15%)', `${imt.skorIMT}/100`, imt.kategoriIMT],
-        ['Tes TKJI (35%)', `${tkji.totalSkorTKJI}/100`, tkji.kategoriTKJI],
+        ['Tes Kebugaran (35%)', `${tkji.totalSkorTKJI}/100`, tkji.kategoriTKJI],
         ['Functional Fitness (35%)', `${functional.totalSkorFunctional}/100`, functional.kategoriFunctional],
         ['TOTAL SKOR AKHIR', `${evaluation.totalSkor}/100`, evaluation.kategoriAkhir.toUpperCase()],
       ],
@@ -159,7 +159,7 @@ export const Screen10CetakLaporan: React.FC<Screen10CetakLaporanProps> = ({
       { 'Parameter': 'Rekomendasi Step Test', 'Nilai': recStepTest },
       { 'Parameter': 'Recovery HR Penurunan (bpm)', 'Nilai': functional.recoveryHrDelta },
       { 'Parameter': 'Rekomendasi Recovery HR', 'Nilai': recRecoveryHR },
-      { 'Parameter': 'Skor TKJI', 'Nilai': tkji.totalSkorTKJI },
+      { 'Parameter': 'Skor Tes Kebugaran', 'Nilai': tkji.totalSkorTKJI },
       { 'Parameter': 'Skor Functional Fitness', 'Nilai': functional.totalSkorFunctional },
       { 'Parameter': 'TOTAL SKOR KEBUGARAN', 'Nilai': evaluation.totalSkor },
       { 'Parameter': 'KATEGORI AKHIR', 'Nilai': evaluation.kategoriAkhir },
@@ -269,7 +269,7 @@ export const Screen10CetakLaporan: React.FC<Screen10CetakLaporanProps> = ({
                     <td className="p-2.5 text-right font-bold text-emerald-700">{imt.kategoriIMT}</td>
                   </tr>
                   <tr>
-                    <td className="p-2.5">Tes TKJI (35%)</td>
+                    <td className="p-2.5">Tes Kebugaran (35%)</td>
                     <td className="p-2.5 text-center">Cooper: {tkji.cooperDistanceMeter}m</td>
                     <td className="p-2.5 text-center font-bold">{tkji.totalSkorTKJI}</td>
                     <td className="p-2.5 text-right font-bold text-emerald-700">{tkji.kategoriTKJI}</td>

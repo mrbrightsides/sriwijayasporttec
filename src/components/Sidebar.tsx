@@ -36,7 +36,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, onSelectTab, onLogo
     { id: 'peserta', label: 'Data Peserta', icon: Users, stepTarget: 2 },
     { id: 'aktivitas', label: 'Aktivitas Fisik', icon: Activity, stepTarget: 3 },
     { id: 'imt', label: 'IMT', icon: Calculator, stepTarget: 4 },
-    { id: 'tkji', label: 'Tes TKJI', icon: Dumbbell, stepTarget: 5 },
+    { id: 'tkji', label: 'Tes Kebugaran', icon: Dumbbell, stepTarget: 5 },
     { id: 'functional', label: 'Functional Fitness', icon: HeartPulse, stepTarget: 6 },
     { id: 'laporan', label: 'Hasil & Laporan', icon: FileSpreadsheet, stepTarget: 10 },
     { id: 'pengaturan', label: 'Pengaturan', icon: Settings, stepTarget: 1 },
@@ -89,7 +89,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, onSelectTab, onLogo
             <span>Sistem Kebugaran</span>
           </div>
           <p className="text-[10px] text-slate-400 leading-relaxed">
-            Terintegrasi Norma WHO, TKJI & Functional Fitness.
+            Terintegrasi Norma WHO, Tes Kebugaran & Functional Fitness.
           </p>
         </div>
 

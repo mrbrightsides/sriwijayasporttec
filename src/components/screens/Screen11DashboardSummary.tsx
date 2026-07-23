@@ -276,7 +276,7 @@ export const Screen11DashboardSummary: React.FC<Screen11DashboardSummaryProps> =
 
         <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
           <div>
-            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Rata-rata Skor TKJI</span>
+            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Rata-rata Skor Tes Kebugaran</span>
             <div className="text-2xl font-black text-emerald-700 mt-0.5">{avgTKJI} Poin</div>
             <span className="text-[10px] text-slate-500 font-medium">Cooper, Pushup, VJump</span>
           </div>
@@ -328,7 +328,7 @@ export const Screen11DashboardSummary: React.FC<Screen11DashboardSummaryProps> =
                 selectedMetric === 'skorTKJI' ? 'bg-[#0b1a30] text-yellow-400 shadow-sm' : 'text-slate-600 hover:text-slate-900'
               }`}
             >
-              TKJI
+              Tes Kebugaran
             </button>
             <button
               onClick={() => setSelectedMetric('skorFunctional')}
@@ -525,7 +525,7 @@ export const Screen11DashboardSummary: React.FC<Screen11DashboardSummaryProps> =
               <Line
                 type="monotone"
                 dataKey="skorTKJI"
-                name="Skor TKJI (Kebugaran Fisik)"
+                name="Skor Tes Kebugaran"
                 stroke="#16a34a"
                 strokeWidth={2}
                 strokeDasharray="4 4"
@@ -571,7 +571,7 @@ export const Screen11DashboardSummary: React.FC<Screen11DashboardSummaryProps> =
                   <th className="p-2.5">Bulan</th>
                   <th className="p-2.5">Tanggal Tes</th>
                   <th className="p-2.5 text-center">Total Skor</th>
-                  <th className="p-2.5 text-center">Skor TKJI</th>
+                  <th className="p-2.5 text-center">Tes Kebugaran</th>
                   <th className="p-2.5 text-center">Functional Fitness</th>
                   <th className="p-2.5 text-center">Komposisi IMT</th>
                   <th className="p-2.5">Status &amp; Kategori</th>
@@ -693,7 +693,7 @@ export const Screen11DashboardSummary: React.FC<Screen11DashboardSummaryProps> =
                 />
                 <Legend wrapperStyle={{ fontSize: '11px' }} />
                 <Bar dataKey="avgTotal" name="Total Skor" fill="#0b1a30" radius={[4, 4, 0, 0]} />
-                <Bar dataKey="avgTKJI" name="Skor TKJI" fill="#22c55e" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="avgTKJI" name="Skor Tes Kebugaran" fill="#22c55e" radius={[4, 4, 0, 0]} />
                 <Bar dataKey="avgFunctional" name="Skor Functional" fill="#eab308" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
