@@ -12,7 +12,7 @@ export const STEPS_CONFIG = [
   { step: 3, title: 'Input Aktivitas Fisik', short: '3. Aktivitas Fisik' },
   { step: 4, title: 'Hitung IMT', short: '4. Hitung IMT' },
   { step: 5, title: 'Tes Kebugaran', short: '5. Tes Kebugaran' },
-  { step: 6, title: 'Functional Fitness', short: '6. Functional' },
+  { step: 6, title: 'Functional Fitness', short: '6. Functional Fitness' },
   { step: 7, title: 'Analisis Sistem', short: '7. Analisis' },
   { step: 8, title: 'Kategori Hasil', short: '8. Kategori' },
   { step: 9, title: 'Rekomendasi Aktivitas', short: '9. Rekomendasi' },

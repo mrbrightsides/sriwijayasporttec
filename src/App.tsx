@@ -363,6 +363,7 @@ export default function App() {
         return (
           <Screen10CetakLaporan
             record={currentRecord}
+            records={records}
             onPrev={() => setActiveStep(9)}
             onNext={() => setActiveStep(11)}
           />
