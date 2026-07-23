@@ -36,6 +36,7 @@ import { Screen8KategoriHasil } from './components/screens/Screen8KategoriHasil'
 import { Screen9RekomendasiAktivitas } from './components/screens/Screen9RekomendasiAktivitas';
 import { Screen10CetakLaporan } from './components/screens/Screen10CetakLaporan';
 import { Screen11DashboardSummary } from './components/screens/Screen11DashboardSummary';
+import { Screen11PersonalProgress } from './components/screens/Screen11PersonalProgress';
 import { Screen12Selesai } from './components/screens/Screen12Selesai';
 
 import { DataPesertaList } from './components/DataPesertaList';
@@ -226,6 +227,18 @@ export default function App() {
       return <Screen1Login onLoginSuccess={handleLoginSuccess} />;
     }
 
+    if (activeTab === 'dashboard') {
+      return (
+        <Screen11DashboardSummary
+          records={records}
+          pesertaList={pesertaList}
+          onSelectPesertaForTest={handleSelectPesertaForTest}
+          onPrev={() => {}}
+          onNext={() => {}}
+        />
+      );
+    }
+
     if (activeTab === 'peserta') {
       return (
         <DataPesertaList
@@ -356,12 +369,12 @@ export default function App() {
         );
       case 11:
         return (
-          <Screen11DashboardSummary
+          <Screen11PersonalProgress
+            record={currentRecord}
             records={records}
-            pesertaList={pesertaList}
-            onSelectPesertaForTest={handleSelectPesertaForTest}
             onPrev={() => setActiveStep(10)}
             onNext={() => setActiveStep(12)}
+            onSelectPesertaForTest={handleSelectPesertaForTest}
           />
         );
       case 12:
@@ -376,12 +389,12 @@ export default function App() {
         );
       default:
         return (
-          <Screen11DashboardSummary
+          <Screen11PersonalProgress
+            record={currentRecord}
             records={records}
-            pesertaList={pesertaList}
-            onSelectPesertaForTest={handleSelectPesertaForTest}
             onPrev={() => setActiveStep(10)}
             onNext={() => setActiveStep(12)}
+            onSelectPesertaForTest={handleSelectPesertaForTest}
           />
         );
     }
@@ -403,7 +416,7 @@ export default function App() {
           currentStep={activeStep}
           onSelectStep={(stepNum) => {
             setActiveStep(stepNum);
-            setActiveTab('dashboard');
+            setActiveTab('tes');
           }}
         />
       )}

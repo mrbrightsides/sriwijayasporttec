@@ -17,7 +17,7 @@ export const STEPS_CONFIG = [
   { step: 8, title: 'Kategori Hasil', short: '8. Kategori' },
   { step: 9, title: 'Rekomendasi Aktivitas', short: '9. Rekomendasi' },
   { step: 10, title: 'Cetak Laporan', short: '10. Cetak' },
-  { step: 11, title: 'Dashboard Summary', short: '11. Dashboard' },
+  { step: 11, title: 'Rapor Peserta', short: '11. Rapor' },
   { step: 12, title: 'Selesai', short: '12. Selesai' },
 ];
 
