@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { AssessmentRecord } from '../../types';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import * as XLSX from 'xlsx';
+import html2canvas from 'html2canvas';
+import { getCategoryStyle } from '../../utils/categoryStyles';
 import {
   ArrowLeft,
   ArrowRight,
@@ -58,6 +60,7 @@ export const Screen10CetakLaporan: React.FC<Screen10CetakLaporanProps> = ({
   onPrev,
   onNext,
 }) => {
+  const [isExportingPDF, setIsExportingPDF] = useState(false);
   const { peserta, evaluation, imt, tkji, functional, aktivitas, tanggal } = record;
 
   const recAktivitasFisik = evaluation.rekomendasi.aktivitasFisik || getRekomendasiAktivitasFisik(aktivitas.kategoriAktivitas);
@@ -114,124 +117,199 @@ export const Screen10CetakLaporan: React.FC<Screen10CetakLaporanProps> = ({
     window.print();
   };
 
-  const handleExportPDF = () => {
-    const doc = new jsPDF();
+  const handleExportPDF = async () => {
+    setIsExportingPDF(true);
+    try {
+      const doc = new jsPDF();
 
-    // Header Title
-    doc.setFillColor(11, 26, 48); // #0b1a30
-    doc.rect(0, 0, 210, 35, 'F');
+      // Header Title
+      doc.setFillColor(11, 26, 48); // #0b1a30
+      doc.rect(0, 0, 210, 35, 'F');
 
-    doc.setTextColor(250, 204, 21); // Yellow
-    doc.setFontSize(16);
-    doc.setFont('helvetica', 'bold');
-    doc.text('SRIWIJAYA SPORT TEC', 14, 15);
+      doc.setTextColor(250, 204, 21); // Yellow
+      doc.setFontSize(16);
+      doc.setFont('helvetica', 'bold');
+      doc.text('SRIWIJAYA SPORT TEC', 14, 15);
 
-    doc.setTextColor(255, 255, 255);
-    doc.setFontSize(10);
-    doc.setFont('helvetica', 'normal');
-    doc.text('UNIVERSITAS SRIWIJAYA - LAPORAN HASIL MONITORING KEBUGARAN', 14, 22);
-    doc.text(`Tanggal Tes: ${tanggal}`, 14, 28);
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'normal');
+      doc.text('UNIVERSITAS SRIWIJAYA - LAPORAN HASIL MONITORING KEBUGARAN', 14, 22);
+      doc.text(`Tanggal Tes: ${tanggal}`, 14, 28);
 
-    // Peserta Info
-    doc.setTextColor(0, 0, 0);
-    doc.setFontSize(11);
-    doc.setFont('helvetica', 'bold');
-    doc.text('1. IDENTITAS PESERTA', 14, 45);
+      // Peserta Info
+      doc.setTextColor(0, 0, 0);
+      doc.setFontSize(11);
+      doc.setFont('helvetica', 'bold');
+      doc.text('1. IDENTITAS PESERTA', 14, 45);
 
-    autoTable(doc, {
-      startY: 48,
-      theme: 'grid',
-      headStyles: { fillColor: [240, 240, 240], textColor: [0, 0, 0], fontStyle: 'bold' },
-      body: [
-        ['Nama Lengkap', peserta.nama, 'Jenis Kelamin', peserta.jenisKelamin],
-        ['Umur', `${peserta.umur} Tahun`, 'Komunitas', peserta.komunitas],
-        ['No. HP', peserta.noHp, 'Alamat', peserta.alamat],
-      ],
-    });
+      autoTable(doc, {
+        startY: 48,
+        theme: 'grid',
+        headStyles: { fillColor: [240, 240, 240], textColor: [0, 0, 0], fontStyle: 'bold' },
+        body: [
+          ['Nama Lengkap', peserta.nama, 'Jenis Kelamin', peserta.jenisKelamin],
+          ['Umur', `${peserta.umur} Tahun`, 'Komunitas', peserta.komunitas],
+          ['No. HP', peserta.noHp, 'Alamat', peserta.alamat],
+        ],
+      });
 
-    // Ringkasan Hasil
-    const lastY1 = (doc as any).lastAutoTable.finalY || 80;
-    doc.text('2. RINGKASAN HASIL EVALUASI KEBUGARAN 5 DIMENSI', 14, lastY1 + 12);
+      // Ringkasan Hasil
+      const lastY1 = (doc as any).lastAutoTable.finalY || 80;
+      doc.text('2. RINGKASAN HASIL EVALUASI KEBUGARAN 5 DIMENSI', 14, lastY1 + 12);
 
-    autoTable(doc, {
-      startY: lastY1 + 16,
-      theme: 'striped',
-      headStyles: { fillColor: [11, 26, 48], textColor: [255, 255, 255] },
-      head: [['Komponen Evaluasi', 'Bobot', 'Skor Nilai', 'Kategori']],
-      body: [
-        ['Aktivitas Fisik Harian', '15%', `${aktivitas.skorAktivitas}/100`, aktivitas.kategoriAktivitas],
-        ['Indeks Massa Tubuh (IMT)', '15%', `${imt.skorIMT}/100`, imt.kategoriIMT],
-        ['Tes Kebugaran', '35%', `${tkji.totalSkorTKJI}/100`, tkji.kategoriTKJI],
-        ['Functional Fitness', '35%', `${functional.totalSkorFunctional}/100`, functional.kategoriFunctional],
-        ['TOTAL SKOR AKHIR', '100%', `${evaluation.totalSkor}/100`, evaluation.kategoriAkhir.toUpperCase()],
-      ],
-    });
+      autoTable(doc, {
+        startY: lastY1 + 16,
+        theme: 'grid',
+        headStyles: { fillColor: [11, 26, 48], textColor: [255, 255, 255], fontStyle: 'bold' },
+        head: [['Komponen Evaluasi', 'Bobot', 'Skor Nilai', 'Kategori']],
+        body: [
+          ['Aktivitas Fisik Harian', '15%', `${aktivitas.skorAktivitas}/100`, aktivitas.kategoriAktivitas],
+          ['Indeks Massa Tubuh (IMT)', '15%', `${imt.skorIMT}/100`, imt.kategoriIMT],
+          ['Tes Kebugaran', '35%', `${tkji.totalSkorTKJI}/100`, tkji.kategoriTKJI],
+          ['Functional Fitness', '35%', `${functional.totalSkorFunctional}/100`, functional.kategoriFunctional],
+          ['TOTAL SKOR AKHIR', '100%', `${evaluation.totalSkor}/100`, evaluation.kategoriAkhir.toUpperCase()],
+        ],
+        didParseCell: (data) => {
+          if (data.section === 'body') {
+            if (data.column.index === 3) {
+              const rawVal = String(data.cell.raw || '');
+              const style = getCategoryStyle(rawVal);
+              data.cell.styles.textColor = style.pdfTextColor;
+              data.cell.styles.fillColor = style.pdfBgColor;
+              data.cell.styles.fontStyle = 'bold';
+              data.cell.styles.halign = 'center';
+            }
+            if (data.row.index === 4 && data.column.index !== 3) {
+              data.cell.styles.fontStyle = 'bold';
+              data.cell.styles.fillColor = [254, 243, 199]; // Amber-100 highlight for total row
+            }
+          }
+        },
+      });
 
-    // Statistik & Benchmark Summary
-    const lastY2 = (doc as any).lastAutoTable.finalY || 140;
-    doc.text('3. ANALISIS STATISTIK & PROFIL BENCHMARK', 14, lastY2 + 12);
+      // Statistik & Benchmark Summary
+      const lastY2 = (doc as any).lastAutoTable.finalY || 140;
+      doc.text('3. ANALISIS STATISTIK & PROFIL BENCHMARK', 14, lastY2 + 12);
 
-    autoTable(doc, {
-      startY: lastY2 + 16,
-      theme: 'grid',
-      headStyles: { fillColor: [245, 158, 11], textColor: [0, 0, 0], fontStyle: 'bold' },
-      head: [['Metrik Analisis', 'Nilai / Hasil', 'Catatan Evaluasi']],
-      body: [
-        ['Rata-Rata Skor 5 Komponen', `${meanScore} / 100`, 'Nilai rata-rata dari seluruh dimensi'],
-        ['Komponen Terunggul (Max)', `${highestComp.name} (${highestComp.score} Poin)`, 'Perlu dipertahankan'],
-        ['Area Fokus Utama (Min)', `${lowestComp.name} (${lowestComp.score} Poin)`, 'Rekomendasi prioritas perbaikan'],
-        ['Indeks Pemulihan Denyut Jantung', `${functional.recoveryHrDelta} bpm`, `Status Pemulihan: ${recRecoveryHR.split('.')[0]}`],
-        ['Deviasi dari Benchmark (75 Poin)', `${deviationFromBenchmark >= 0 ? '+' : ''}${deviationFromBenchmark} Poin`, evaluation.totalSkor >= 75 ? 'Memenuhi Standar Kebugaran Baik' : 'Di Bawah Target Benchmark'],
-      ],
-    });
+      autoTable(doc, {
+        startY: lastY2 + 16,
+        theme: 'grid',
+        headStyles: { fillColor: [245, 158, 11], textColor: [0, 0, 0], fontStyle: 'bold' },
+        head: [['Metrik Analisis', 'Nilai / Hasil', 'Catatan Evaluasi']],
+        body: [
+          ['Rata-Rata Skor 5 Komponen', `${meanScore} / 100`, 'Nilai rata-rata dari seluruh dimensi'],
+          ['Komponen Terunggul (Max)', `${highestComp.name} (${highestComp.score} Poin)`, 'Perlu dipertahankan'],
+          ['Area Fokus Utama (Min)', `${lowestComp.name} (${lowestComp.score} Poin)`, 'Rekomendasi prioritas perbaikan'],
+          ['Indeks Pemulihan Denyut Jantung', `${functional.recoveryHrDelta} bpm`, `Status Pemulihan: ${recRecoveryHR.split('.')[0]}`],
+          ['Deviasi dari Benchmark (75 Poin)', `${deviationFromBenchmark >= 0 ? '+' : ''}${deviationFromBenchmark} Poin`, evaluation.totalSkor >= 75 ? 'Memenuhi Standar Kebugaran Baik' : 'Di Bawah Target Benchmark'],
+        ],
+      });
 
-    // Sub-Tes Detail
-    const lastY3 = (doc as any).lastAutoTable.finalY || 190;
-    doc.addPage();
-    doc.text('4. DETAIL HASIL SUB-TES LAPANGAN', 14, 20);
+      // Sub-Tes Detail on Page 2
+      doc.addPage();
+      doc.text('4. DETAIL HASIL SUB-TES LAPANGAN', 14, 20);
 
-    autoTable(doc, {
-      startY: 24,
-      theme: 'grid',
-      headStyles: { fillColor: [11, 26, 48], textColor: [255, 255, 255] },
-      head: [['Nama Sub-Tes', 'Hasil Mentah', 'Skor Norma', 'Indikator']],
-      body: [
-        ['Push-Up 60 Detik', `${tkji.pushUpRepetisi} reps`, `${tkji.skorPushUp}/100`, 'Daya Tahan Otot'],
-        ['Vertical Jump', `${tkji.verticalJumpCm} cm`, `${tkji.skorVerticalJump}/100`, 'Power Tungkai'],
-        ['Lari 12 Menit (Cooper)', `${tkji.cooperDistanceMeter} m`, `${tkji.skorCooper}/100`, 'Kapasitas Kardiorespirasi'],
-        ['Sit to Stand 30 Detik', `${functional.sitToStandReps} reps`, `${functional.skorSitToStand}/100`, 'Kekuatan Tungkai Bawah'],
-        ['Plank Stability', `${functional.plankSeconds} detik`, `${functional.skorPlank}/100`, 'Stabilitas Otot Inti'],
-        ['Balance 1 Kaki', `${functional.balanceSeconds} detik`, `${functional.skorBalance}/100`, 'Keseimbangan Statis'],
-        ['Sit and Reach', `${functional.sitAndReachCm} cm`, `${functional.skorSitAndReach}/100`, 'Fleksibilitas Sendi'],
-        ['Step Test Recovery HR', `${functional.stepTestRecoveryPulse} bpm`, `${functional.skorStepTest}/100`, 'Denyut Nadi Pemulihan'],
-      ],
-    });
+      autoTable(doc, {
+        startY: 24,
+        theme: 'grid',
+        headStyles: { fillColor: [11, 26, 48], textColor: [255, 255, 255] },
+        head: [['Nama Sub-Tes', 'Hasil Mentah', 'Skor Norma', 'Indikator']],
+        body: [
+          ['Push-Up 60 Detik', `${tkji.pushUpRepetisi} reps`, `${tkji.skorPushUp}/100`, 'Daya Tahan Otot'],
+          ['Vertical Jump', `${tkji.verticalJumpCm} cm`, `${tkji.skorVerticalJump}/100`, 'Power Tungkai'],
+          ['Lari 12 Menit (Cooper)', `${tkji.cooperDistanceMeter} m`, `${tkji.skorCooper}/100`, 'Kapasitas Kardiorespirasi'],
+          ['Sit to Stand 30 Detik', `${functional.sitToStandReps} reps`, `${functional.skorSitToStand}/100`, 'Kekuatan Tungkai Bawah'],
+          ['Plank Stability', `${functional.plankSeconds} detik`, `${functional.skorPlank}/100`, 'Stabilitas Otot Inti'],
+          ['Balance 1 Kaki', `${functional.balanceSeconds} detik`, `${functional.skorBalance}/100`, 'Keseimbangan Statis'],
+          ['Sit and Reach', `${functional.sitAndReachCm} cm`, `${functional.skorSitAndReach}/100`, 'Fleksibilitas Sendi'],
+          ['Step Test Recovery HR', `${functional.stepTestRecoveryPulse} bpm`, `${functional.skorStepTest}/100`, 'Denyut Nadi Pemulihan'],
+        ],
+      });
 
-    // Rekomendasi
-    const lastY4 = (doc as any).lastAutoTable.finalY || 100;
-    doc.text('5. REKOMENDASI PROGRAM AKTIVITAS FITT', 14, lastY4 + 12);
+      let nextY = (doc as any).lastAutoTable.finalY || 100;
 
-    autoTable(doc, {
-      startY: lastY4 + 16,
-      theme: 'grid',
-      body: [
-        ['Aktivitas Fisik Harian', recAktivitasFisik],
-        ['Status Gizi (IMT)', recIMT],
-        ['Push-Up (Daya Tahan Otot)', recPushUp],
-        ['Vertical Jump (Power)', recVerticalJump],
-        ['Lari 12 Menit (Kardio)', recCooperRun],
-        ['Sit to Stand (Tungkai)', recSitToStand],
-        ['Plank (Core)', recPlank],
-        ['Balance (Keseimbangan)', recBalance],
-        ['Sit and Reach (Fleksibilitas)', recSitAndReachFF],
-        ['Step Test & Recovery HR', recStepTest],
-        ['Program Daya Tahan', evaluation.rekomendasi.dayaTahan],
-        ['Program Kekuatan', evaluation.rekomendasi.kekuatan],
-        ['Program Fleksibilitas', evaluation.rekomendasi.fleksibilitas],
-      ],
-    });
+      // 5. VISUAL CHARTS (Radar & Bar Chart captured via html2canvas)
+      const chartsElement = document.getElementById('charts-container-pdf');
+      if (chartsElement) {
+        try {
+          const canvas = await html2canvas(chartsElement, {
+            scale: 2,
+            useCORS: true,
+            backgroundColor: '#ffffff',
+            logging: false,
+            onclone: (clonedDoc) => {
+              // 1. Sanitize all <style> elements in cloned document to remove oklch syntax which html2canvas cannot parse
+              const styleElements = clonedDoc.querySelectorAll('style');
+              styleElements.forEach((style) => {
+                if (style.textContent) {
+                  style.textContent = style.textContent.replace(/oklch\([^)]+\)/gi, '#0b1a30');
+                }
+              });
 
-    doc.save(`Laporan_Kebugaran_${peserta.nama.replace(/\s+/g, '_')}.pdf`);
+              // 2. Sanitize inline styles on all elements
+              const allElements = clonedDoc.querySelectorAll('*');
+              allElements.forEach((node) => {
+                const element = node as HTMLElement;
+                if (element.style && element.style.cssText) {
+                  if (element.style.cssText.includes('oklch')) {
+                    element.style.cssText = element.style.cssText.replace(/oklch\([^)]+\)/gi, '#0b1a30');
+                  }
+                }
+              });
+            },
+          });
+          const imgData = canvas.toDataURL('image/png');
+          const imgWidth = 182; // printable width mm
+          const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+          doc.setFont('helvetica', 'bold');
+          doc.text('5. VISUALISASI GRAFIK RADAR & BAR CHART PROFIL', 14, nextY + 12);
+          doc.addImage(imgData, 'PNG', 14, nextY + 16, imgWidth, imgHeight);
+          nextY = nextY + 16 + imgHeight;
+        } catch (err) {
+          console.error('Failed capturing chart canvas for PDF:', err);
+        }
+      }
+
+      // Check space for 6. REKOMENDASI
+      if (nextY + 60 > 280) {
+        doc.addPage();
+        nextY = 20;
+      } else {
+        nextY += 12;
+      }
+
+      doc.setFont('helvetica', 'bold');
+      doc.text('6. REKOMENDASI PROGRAM AKTIVITAS FITT', 14, nextY);
+
+      autoTable(doc, {
+        startY: nextY + 4,
+        theme: 'grid',
+        body: [
+          ['Aktivitas Fisik Harian', recAktivitasFisik],
+          ['Status Gizi (IMT)', recIMT],
+          ['Push-Up (Daya Tahan Otot)', recPushUp],
+          ['Vertical Jump (Power)', recVerticalJump],
+          ['Lari 12 Menit (Kardio)', recCooperRun],
+          ['Sit to Stand (Tungkai)', recSitToStand],
+          ['Plank (Core)', recPlank],
+          ['Balance (Keseimbangan)', recBalance],
+          ['Sit and Reach (Fleksibilitas)', recSitAndReachFF],
+          ['Step Test & Recovery HR', recStepTest],
+          ['Program Daya Tahan', evaluation.rekomendasi.dayaTahan],
+          ['Program Kekuatan', evaluation.rekomendasi.kekuatan],
+          ['Program Fleksibilitas', evaluation.rekomendasi.fleksibilitas],
+        ],
+      });
+
+      doc.save(`Laporan_Kebugaran_Lengkap_${peserta.nama.replace(/\s+/g, '_')}.pdf`);
+    } catch (err) {
+      console.error('Export PDF error:', err);
+      alert('Gagal mengekspor PDF. Silakan coba lagi.');
+    } finally {
+      setIsExportingPDF(false);
+    }
   };
 
   const handleExportExcel = () => {
@@ -384,35 +462,55 @@ export const Screen10CetakLaporan: React.FC<Screen10CetakLaporanProps> = ({
                     <td className="p-2.5 text-center text-slate-500">15%</td>
                     <td className="p-2.5 text-center">{aktivitas.jenisUtama}</td>
                     <td className="p-2.5 text-center font-bold">{aktivitas.skorAktivitas}</td>
-                    <td className="p-2.5 text-right font-bold text-emerald-700">{aktivitas.kategoriAktivitas}</td>
+                    <td className="p-2.5 text-right">
+                      <span className={getCategoryStyle(aktivitas.kategoriAktivitas).badgeClass}>
+                        {aktivitas.kategoriAktivitas}
+                      </span>
+                    </td>
                   </tr>
                   <tr>
                     <td className="p-2.5">Indeks Massa Tubuh (IMT)</td>
                     <td className="p-2.5 text-center text-slate-500">15%</td>
                     <td className="p-2.5 text-center">{imt.nilaiIMT} kg/m² ({imt.kategoriIMT})</td>
                     <td className="p-2.5 text-center font-bold">{imt.skorIMT}</td>
-                    <td className="p-2.5 text-right font-bold text-emerald-700">{imt.kategoriIMT}</td>
+                    <td className="p-2.5 text-right">
+                      <span className={getCategoryStyle(imt.kategoriIMT).badgeClass}>
+                        {imt.kategoriIMT}
+                      </span>
+                    </td>
                   </tr>
                   <tr>
                     <td className="p-2.5">Tes Kebugaran</td>
                     <td className="p-2.5 text-center text-slate-500">35%</td>
                     <td className="p-2.5 text-center">Cooper: {tkji.cooperDistanceMeter}m</td>
                     <td className="p-2.5 text-center font-bold">{tkji.totalSkorTKJI}</td>
-                    <td className="p-2.5 text-right font-bold text-emerald-700">{tkji.kategoriTKJI}</td>
+                    <td className="p-2.5 text-right">
+                      <span className={getCategoryStyle(tkji.kategoriTKJI).badgeClass}>
+                        {tkji.kategoriTKJI}
+                      </span>
+                    </td>
                   </tr>
                   <tr>
                     <td className="p-2.5">Functional Fitness</td>
                     <td className="p-2.5 text-center text-slate-500">35%</td>
                     <td className="p-2.5 text-center">Step Test: {functional.stepTestRecoveryPulse} bpm</td>
                     <td className="p-2.5 text-center font-bold">{functional.totalSkorFunctional}</td>
-                    <td className="p-2.5 text-right font-bold text-emerald-700">{functional.kategoriFunctional}</td>
+                    <td className="p-2.5 text-right">
+                      <span className={getCategoryStyle(functional.kategoriFunctional).badgeClass}>
+                        {functional.kategoriFunctional}
+                      </span>
+                    </td>
                   </tr>
-                  <tr className="bg-yellow-50 font-black text-slate-900 border-t-2 border-slate-300">
+                  <tr className="bg-yellow-50/80 font-black text-slate-900 border-t-2 border-slate-300">
                     <td className="p-2.5 uppercase">TOTAL SKOR AKHIR</td>
                     <td className="p-2.5 text-center text-amber-700">100%</td>
                     <td className="p-2.5 text-center text-slate-600">NORMA SRISPORT</td>
                     <td className="p-2.5 text-center text-amber-700 text-sm">{evaluation.totalSkor}</td>
-                    <td className="p-2.5 text-right text-emerald-800 text-sm">{evaluation.kategoriAkhir.toUpperCase()}</td>
+                    <td className="p-2.5 text-right">
+                      <span className={getCategoryStyle(evaluation.kategoriAkhir).badgeClass}>
+                        {evaluation.kategoriAkhir.toUpperCase()}
+                      </span>
+                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -450,10 +548,10 @@ export const Screen10CetakLaporan: React.FC<Screen10CetakLaporanProps> = ({
           </div>
 
           {/* VISUAL CHARTS SECTION (RADAR & BAR CHART) */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+          <div id="charts-container-pdf" className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 bg-white p-2 rounded-xl" style={{ backgroundColor: '#ffffff' }}>
             
             {/* Radar Chart 5 Dimensions */}
-            <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
+            <div className="bg-slate-50 p-4 rounded-xl border border-slate-200" style={{ backgroundColor: '#f8fafc', borderColor: '#e2e8f0' }}>
               <div className="flex items-center justify-between mb-2">
                 <h5 className="text-xs font-bold text-slate-800 flex items-center space-x-1.5">
                   <Activity className="w-3.5 h-3.5 text-indigo-600" />
@@ -475,7 +573,7 @@ export const Screen10CetakLaporan: React.FC<Screen10CetakLaporanProps> = ({
             </div>
 
             {/* Sub-Tests Bar Chart */}
-            <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
+            <div className="bg-slate-50 p-4 rounded-xl border border-slate-200" style={{ backgroundColor: '#f8fafc', borderColor: '#e2e8f0' }}>
               <div className="flex items-center justify-between mb-2">
                 <h5 className="text-xs font-bold text-slate-800 flex items-center space-x-1.5">
                   <BarChart3 className="w-3.5 h-3.5 text-emerald-600" />
@@ -566,10 +664,11 @@ export const Screen10CetakLaporan: React.FC<Screen10CetakLaporanProps> = ({
 
           <button
             onClick={handleExportPDF}
-            className="inline-flex items-center space-x-2 px-4 py-2.5 bg-blue-700 hover:bg-blue-800 text-white font-bold text-xs rounded-xl shadow-md transition-all"
+            disabled={isExportingPDF}
+            className="inline-flex items-center space-x-2 px-4 py-2.5 bg-blue-700 hover:bg-blue-800 disabled:bg-blue-400 text-white font-bold text-xs rounded-xl shadow-md transition-all cursor-pointer disabled:cursor-not-allowed"
           >
             <Printer className="w-4 h-4" />
-            <span>Download PDF Laporan</span>
+            <span>{isExportingPDF ? 'Proses PDF & Grafik...' : 'Download PDF Laporan'}</span>
           </button>
 
           <button

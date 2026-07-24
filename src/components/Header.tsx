@@ -29,9 +29,6 @@ export const Header: React.FC<HeaderProps> = ({ user, onLogout, activeStep, setA
               </div>
               <h1 className="text-base sm:text-xl font-bold tracking-tight text-white flex items-center gap-1.5">
                 <span>SRIWIJAYA SPORT TEC</span>
-                <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-yellow-500/20 text-yellow-300 border border-yellow-500/30">
-                  PROTOTIPE
-                </span>
               </h1>
               <p className="text-[11px] sm:text-xs text-slate-300 hidden sm:block">
                 Sistem Monitoring Kebugaran Olahraga Masyarakat Berbasis Web
